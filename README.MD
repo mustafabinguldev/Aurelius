@@ -1,45 +1,16 @@
-This project is a very lightweight webserver
+Very lightweight webserver
 
-Example:
-```
+Example: Within reales.
 
-//Port and Max Thread(pool)
-WebServer webServer = new WebServer(8080, 4);
-webServer.addListener(responseManager -> {
+How can I start?
+java -Dfile.encoding=UTF-8 -jar aurelius.jar
 
-     responseManager.addHttpData("<h1>Hello World!</h1>");
-     responseManager.addHttpData("<h3 style='color: red;'>Colored Txt</>");
-     responseManager.addHttpData("<p>This project is a very lightweight webserver</p>");
-     responseManager.addHttpData("<p>Your ip adress:"+responseManager.getRequestAdress()+"</>");
-
-
-  // responseManager.setCancelled(true);
-});
-
-webServer.start();
-```
-
-```
-	<repository>
-		<id>jitpack.io</id>
-		<url>https://jitpack.io</url>
-	</repository>
-
-	<dependency>
-	    <groupId>com.github.BingulHan</groupId>
-	    <artifactId>SocketHttpResponse</artifactId>
-	    <version>0.1</version>
-	</dependency>
-
-```
 
 Soon to be added (Coming soon):
-- Sending different pages with root
+- Sending different pages with root (%90) 
 - Sending img etc files
-- Send Javascript
+- Send Javascript (%80)
 - Restful service publishing
 - Send JSON
 - Mini IOC Container
 
-
-I am doing this project to better understand the working logic of other frameworks and to develop more in this field by engineering from scratch. 

@@ -5,5 +5,5 @@ import tech.bingulhan.webserver.response.ResponseManager;
 
 public interface HttpListener {
 
-    void onHttpRequest(ResponseManager responseManager);
+    void onHttpRequest(ResponseManager responseManager, String root);
 }

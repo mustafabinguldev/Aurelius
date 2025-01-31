@@ -28,23 +28,51 @@ public class SocketResponse {
     }
 
     public void sendData() throws IOException {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        String requestLine = reader.readLine();
+
+        String root = "";
+
+        if (requestLine != null) {
+            String[] requestParts = requestLine.split(" ");
+            String method = requestParts[0];
+            String url = requestParts[1];
+
+
+            String path = url.split("\\?")[0];
+            String queryParams = url.contains("?") ? url.split("\\?")[1] : "";
+            root = path;
+
+
+            if (!queryParams.isEmpty()) {
+                String[] params = queryParams.split("&");
+                for (String param : params) {
+                    String[] paramPair = param.split("=");
+                    String key = paramPair[0];
+                    String value = paramPair.length > 1 ? paramPair[1] : null;
+
+                }
+            }
+
+        }
+
+
         BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         PrintWriter out = new PrintWriter(this.socket.getOutputStream());
 
-        //Start sending our reply, using the HTTP 1.1 protocol
-        out.print("HTTP/1.1 200 \r\n"); // Version & status code
-        out.print("Content-Type: text/html\r\n"); // The type of data
-        out.print("Connection: close\r\n"); // Will close stream
+        out.print("HTTP/1.1 200 OK\r\n"); // Version & status code
+        out.print("Content-Type: text/html; charset=UTF-8\r\n"); // The type of data
         out.print("\r\n"); // End of headers
 
 
         ResponseManager responseManager = new ResponseManager(out,webServer,socket.getRemoteSocketAddress().toString());
-        webServer.getHttpListeners().forEach(l->l.onHttpRequest(responseManager));
+        String finalRoot = root;
+        webServer.getHttpListeners().forEach(l->l.onHttpRequest(responseManager, finalRoot));
 
-        webServer.getLogger().info("Request: IP Adress:"+socket.getRemoteSocketAddress().toString());
 
         if (!responseManager.isCancelled()) {
-            out.close(); // Flush and close the output stream
+            out.close();
         }
 
         in.close(); // Close the input stream
