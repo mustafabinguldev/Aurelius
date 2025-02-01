@@ -1,14 +1,11 @@
 package tech.bingulhan.webserver.server;
 
 import lombok.Getter;
-import tech.bingulhan.webserver.listeners.HttpListener;
-import tech.bingulhan.webserver.response.SocketResponse;
+import tech.bingulhan.webserver.response.WebSocketResponse;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -17,7 +14,7 @@ import java.util.logging.Logger;
 /**
  * @author BingulHan
  */
-public class WebServer {
+public class HttpServer {
 
 
     protected ServerSocket serverSocket;
@@ -30,14 +27,11 @@ public class WebServer {
 
     private ExecutorService webServerService;
 
-    @Getter
-    private List<HttpListener> httpListeners;
 
-    public WebServer(int port, int threedSize) {
+
+    public HttpServer(int port, int threedSize) {
         this.port = port;
         this.threadSize = threedSize;
-
-        httpListeners = new LinkedList<>();
     }
 
     public final void start(){
@@ -64,20 +58,17 @@ public class WebServer {
         while(!serverSocket.isClosed()) {
             Socket socket = this.serverSocket.accept();
 
-            WebServer finalWebServer = this;
+            HttpServer finalWebServer = this;
             this.webServerService.execute(new Runnable() {
                 @Override
                 public void run() {
-                    new SocketResponse(finalWebServer,socket);
+                    new WebSocketResponse(finalWebServer,socket);
                 }
             });
         }
     }
 
-    public WebServer addListener(HttpListener httpListener) {
-        httpListeners.add(httpListener);
-        return this;
-    }
+
 
 
 

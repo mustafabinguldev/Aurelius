@@ -2,7 +2,7 @@ package tech.bingulhan.webserver.app;
 
 import org.jsoup.Jsoup;
 import org.yaml.snakeyaml.Yaml;
-import tech.bingulhan.webserver.server.WebServer;
+import tech.bingulhan.webserver.server.HttpServer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,12 +10,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class AureliusApp {
+public class AureliusApplication {
 
     private int port;
     private int threadSize;
@@ -25,11 +23,11 @@ public class AureliusApp {
 
     private File settingsFile;
 
-    private WebServer webServer;
+    private HttpServer webServer;
 
-    private HashMap<String, PageDom> pages;
+    public static HashMap<String, PageStructure> PAGES;
 
-    public AureliusApp(File file) {
+    public AureliusApplication(File file) {
 
         if (!file.exists()){
             System.err.println("The home directory could not be read.");
@@ -57,13 +55,13 @@ public class AureliusApp {
             return;
         }
 
-        pages = new HashMap<>();
+        PAGES = new HashMap<>();
 
         try {
 
             readPageData("/","main",new File(foldersFile,
-                    "main.html"), new File(foldersFile, "main.js"),
-                    new File("main.css"));
+                    "main.html"), new File(foldersFile, "main.css"),
+                    new File(foldersFile,"main.js"));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -115,31 +113,7 @@ public class AureliusApp {
     }
 
     public void start() {
-        webServer = new WebServer(port, threadSize);
-        webServer.addListener((responseManager, root) -> {
-
-            if (root.equals("/favicon.ico")) {
-                 return;
-            }
-
-            if (pages.containsKey(root)) {
-
-                PageDom dom = pages.get(root);
-
-                String cssData = dom.getPageCssData();
-                String jssData = dom.getPageJsData();
-                String htmlData = dom.getPageData();
-                String mergedData = htmlData.replace("</head>",
-                        "<style>\n" + cssData + "\n</style>\n" +
-                                "<script>\n" + jssData + "\n</script>\n</head>");
-
-                responseManager.addHttpData(mergedData);
-
-
-            }else{
-                responseManager.addHttpData("<h1>404</h1>");
-            }
-        });
+        webServer = new HttpServer(port, threadSize);
         webServer.start();
     }
 
@@ -158,7 +132,7 @@ public class AureliusApp {
             String jsFileText = new String(Files.readAllBytes(jsFile.toPath()), StandardCharsets.UTF_8);
             js = Jsoup.parse(jsFileText, "UTF-8").text();
         }
-        pages.put(rootName, new PageDom(pageName, html, js, css));
+        PAGES.put(rootName, new PageStructure(pageName, html, js, css));
         System.out.println("The page has been saved: "+rootName+" root: "+pageName);
     }
 

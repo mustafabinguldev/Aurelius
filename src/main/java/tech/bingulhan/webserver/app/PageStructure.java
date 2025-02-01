@@ -9,7 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
-public class PageDom {
+public class PageStructure {
 
     private String pageRoot;
     private String pageData;
