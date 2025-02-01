@@ -1,5 +1,7 @@
 package tech.bingulhan.webserver;
 
+import tech.bingulhan.webserver.app.AureliusApp;
+
 import java.io.File;
 
 public class Main {

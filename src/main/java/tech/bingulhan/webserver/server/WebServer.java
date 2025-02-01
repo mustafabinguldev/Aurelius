@@ -1,12 +1,10 @@
-package tech.bingulhan.webserver;
+package tech.bingulhan.webserver.server;
 
 import lombok.Getter;
 import tech.bingulhan.webserver.listeners.HttpListener;
 import tech.bingulhan.webserver.response.SocketResponse;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
@@ -43,9 +41,6 @@ public class WebServer {
     }
 
     public final void start(){
-        getLogger().info("WebServer v0.1 has starting...");
-        getLogger().info("Author: BingulHan");
-
         this.webServerService = Executors.newFixedThreadPool(this.threadSize);
         try {
             init();

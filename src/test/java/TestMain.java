@@ -1,4 +1,4 @@
-import tech.bingulhan.webserver.AureliusApp;
+import tech.bingulhan.webserver.app.AureliusApp;
 
 import java.io.File;
 

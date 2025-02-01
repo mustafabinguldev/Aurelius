@@ -1,7 +1,6 @@
 package tech.bingulhan.webserver.response;
 
-import tech.bingulhan.webserver.WebServer;
-import tech.bingulhan.webserver.response.ResponseManager;
+import tech.bingulhan.webserver.server.WebServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;

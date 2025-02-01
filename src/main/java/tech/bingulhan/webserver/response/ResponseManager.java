@@ -1,7 +1,7 @@
 package tech.bingulhan.webserver.response;
 
 import lombok.Getter;
-import tech.bingulhan.webserver.WebServer;
+import tech.bingulhan.webserver.server.WebServer;
 
 import java.io.PrintWriter;
 
