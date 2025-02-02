@@ -10,8 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class AureliusApplication {
 
@@ -26,6 +25,8 @@ public class AureliusApplication {
     private HttpServer webServer;
 
     public static HashMap<String, PageStructure> PAGES;
+
+    public static List<MediaStructure> MEDIA_STRUCTURES;
 
     public AureliusApplication(File file) {
 
@@ -56,6 +57,8 @@ public class AureliusApplication {
         }
 
         PAGES = new HashMap<>();
+        MEDIA_STRUCTURES = new ArrayList<>();
+
 
         try {
 
@@ -68,13 +71,32 @@ public class AureliusApplication {
         }
 
         pagesLoad();
+        mediaFilesLoad();
         readSettingsYml();
         start();
     }
 
 
+    private void mediaFilesLoad() {
+        File publicFolder = new File(applicationFolder, "public");
+
+
+        if (publicFolder.exists() && publicFolder.isDirectory()) {
+            for (File file : Objects.requireNonNull(publicFolder.listFiles())) {
+                if (file.isFile()) {
+                    String name = file.getName();
+                    String path = file.getAbsolutePath();
+                    MediaStructure structure = new MediaStructure(name, path);
+                    MEDIA_STRUCTURES.add(structure);
+                }
+            }
+        }
+
+        System.out.println("Public Files: "+MEDIA_STRUCTURES.size());
+
+    }
     private void pagesLoad() {
-        for (File folder : foldersFile.listFiles()) {
+        for (File folder : Objects.requireNonNull(foldersFile.listFiles())) {
             if (folder.isDirectory()) {
                 String pageName= folder.getName();
                 File htmlFolder = new File(folder, "page.html");
