@@ -25,6 +25,11 @@ public class ResponseService {
         return this;
     }
 
+    public ResponseService add(String txt) {
+        this.printWriter.print(txt);
+        return this;
+    }
+
     public void setCancelled(boolean isCancelled) {
         this.cancelled = isCancelled;
     }

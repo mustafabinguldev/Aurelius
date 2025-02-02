@@ -12,8 +12,9 @@ public class RequestStructure {
     private boolean isValid;
 
     private String method;
-    private String url;
-    private String root;
 
+    private String url;
+
+    private String root;
 
 }

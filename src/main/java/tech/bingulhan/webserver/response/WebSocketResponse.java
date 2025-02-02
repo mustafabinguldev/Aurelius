@@ -31,19 +31,16 @@ public class WebSocketResponse {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String requestLine = reader.readLine();
-        System.out.println(requestLine);
         RequestStructure requestStructure = requestData(requestLine);
 
         BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         PrintWriter out = new PrintWriter(this.socket.getOutputStream());
 
-        out.print("HTTP/1.1 200 OK\r\n");
-        out.print("Content-Type: text/html; charset=UTF-8\r\n");
-        out.print("\r\n");
+        ResponseService responseManager =
+                new ResponseService(out,webServer,socket.getRemoteSocketAddress().toString());
 
-        ResponseService responseManager = new ResponseService(out,webServer,socket.getRemoteSocketAddress().toString());
+        ResponseHandler.handle(responseManager, requestStructure);
 
-        new GetResponseMvcHandler().handleResponse(responseManager, requestStructure);
         if (!responseManager.isCancelled()) {
             out.close();
         }
@@ -56,7 +53,6 @@ public class WebSocketResponse {
 
     private RequestStructure requestData(String line) {
         if (line != null) {
-
             String[] requestParts = line.split(" ");
             String method = requestParts[0];
             String url = requestParts[1];
@@ -69,18 +65,6 @@ public class WebSocketResponse {
             result.setValid(true);
 
             return result;
-            /*
-            String queryParams = url.contains("?") ? url.split("\\?")[1] : "";
-            root = path;
-            if (!queryParams.isEmpty()) {
-                String[] params = queryParams.split("&");
-                for (String param : params) {
-                    String[] paramPair = param.split("=");
-                    String key = paramPair[0];
-                    String value = paramPair.length > 1 ? paramPair[1] : null;
-                }
-            }*/
-
         }
 
         return new RequestStructure();

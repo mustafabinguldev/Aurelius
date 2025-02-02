@@ -9,6 +9,10 @@ import tech.bingulhan.webserver.response.ResponseService;
 public class GetResponseMvcHandler implements ResponseHandler {
     @Override
     public void handleResponse(ResponseService service, RequestStructure structure) {
+
+        service.add("HTTP/1.1 200 OK\r\n");
+        service.add("Content-Type: text/html; charset=UTF-8\r\n");
+        service.add("\r\n");
         if (structure.getMethod().equals("GET")) {
             if (structure.getRoot().equals("/favicon.ico")) {
                 return;
