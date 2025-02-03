@@ -27,8 +27,6 @@ public class HttpServer {
 
     private ExecutorService webServerService;
 
-
-
     public HttpServer(int port, int threedSize) {
         this.port = port;
         this.threadSize = threedSize;
@@ -59,6 +57,8 @@ public class HttpServer {
             Socket socket = this.serverSocket.accept();
 
             HttpServer finalWebServer = this;
+
+
             this.webServerService.execute(new Runnable() {
                 @Override
                 public void run() {

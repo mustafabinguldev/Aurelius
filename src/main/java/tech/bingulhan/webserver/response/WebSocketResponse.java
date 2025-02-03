@@ -1,6 +1,5 @@
 package tech.bingulhan.webserver.response;
 
-import tech.bingulhan.webserver.response.impl.GetResponseMvcHandler;
 import tech.bingulhan.webserver.server.HttpServer;
 
 import java.io.BufferedReader;
@@ -36,19 +35,15 @@ public class WebSocketResponse {
         BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         PrintWriter out = new PrintWriter(this.socket.getOutputStream());
 
+
         ResponseService responseManager =
-                new ResponseService(out,webServer,socket.getRemoteSocketAddress().toString());
+                new ResponseService(in,out,webServer,socket.getRemoteSocketAddress().toString(), socket);
 
         ResponseHandler.handle(responseManager, requestStructure);
 
-        if (!responseManager.isCancelled()) {
-            out.close();
-        }
-
+        out.close();
         in.close();
-        this.socket.close();
-
-
+        socket.close();
     }
 
     private RequestStructure requestData(String line) {

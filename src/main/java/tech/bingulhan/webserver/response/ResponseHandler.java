@@ -1,13 +1,26 @@
 package tech.bingulhan.webserver.response;
 
-import tech.bingulhan.webserver.response.impl.GetResponseMvcHandler;
+
+import java.net.Socket;
 
 public interface ResponseHandler {
 
      void handleResponse(ResponseService service, RequestStructure structure);
 
      static void handle(ResponseService service, RequestStructure structure) {
-          new GetResponseMvcHandler().handleResponse(service, structure);
+          String[] paths = structure.getRoot().split("/");
+          if (paths.length>1) {
+               for (ResponseType type: ResponseType.values()) {
+                    if (type.path.equals(paths[1])) {
+                         type.handler.handleResponse(service, structure);
+                         return;
+                    }
+               }
+          }
+
+          ResponseType.PAGE.handler.handleResponse(service,structure);
+
+
      }
 
 }

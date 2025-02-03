@@ -6,19 +6,29 @@ import tech.bingulhan.webserver.response.RequestStructure;
 import tech.bingulhan.webserver.response.ResponseHandler;
 import tech.bingulhan.webserver.response.ResponseService;
 
+import java.io.IOException;
+import java.net.Socket;
+
 public class GetResponseMvcHandler implements ResponseHandler {
     @Override
     public void handleResponse(ResponseService service, RequestStructure structure) {
 
-        service.add("HTTP/1.1 200 OK\r\n");
-        service.add("Content-Type: text/html; charset=UTF-8\r\n");
-        service.add("\r\n");
+
+
         if (structure.getMethod().equals("GET")) {
             if (structure.getRoot().equals("/favicon.ico")) {
-                return;
+                service.add("HTTP/1.1 400\r\n");
+                service.add("Content-Type: text/html; charset=UTF-8\r\n");
+                service.add("\r\n");
+
             }
 
             if (AureliusApplication.PAGES.containsKey(structure.getRoot())) {
+
+                service.add("HTTP/1.1 200 OK\r\n");
+                service.add("Content-Type: text/html; charset=UTF-8\r\n");
+                service.add("\r\n");
+
                 PageStructure dom = AureliusApplication.PAGES.get(structure.getRoot());
                 String cssData = dom.getPageCssData();
                 String jssData = dom.getPageJsData();
@@ -31,5 +41,6 @@ public class GetResponseMvcHandler implements ResponseHandler {
                 service.addHttpData("<h1>404</h1>");
             }
         }
+
     }
 }
