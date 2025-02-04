@@ -22,7 +22,7 @@ public class WebSocketResponse {
         try {
             handleRequest();
         } catch (IOException e) {
-            server.getLogger().warning(e.getMessage());
+            //
         }
     }
 

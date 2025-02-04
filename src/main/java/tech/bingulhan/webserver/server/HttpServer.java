@@ -22,9 +22,6 @@ public class HttpServer {
     private final int port;
     private final int threadSize;
 
-    @Getter
-    private Logger logger = Logger.getLogger("WebServer");
-
     private ExecutorService webServerService;
 
     public HttpServer(int port, int threedSize) {
@@ -38,7 +35,7 @@ public class HttpServer {
             init();
             socketsHandler();
         }catch (Exception exception) {
-            logger.warning(exception.getMessage());
+            //
         }
     }
 
@@ -57,7 +54,6 @@ public class HttpServer {
             Socket socket = this.serverSocket.accept();
 
             HttpServer finalWebServer = this;
-
 
             this.webServerService.execute(new Runnable() {
                 @Override
