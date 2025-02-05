@@ -128,7 +128,7 @@ public class AureliusApplication {
         }
     }
 
-    public Map<String, Object> readYaml(String filePath) throws IOException, FileNotFoundException {
+    public Map<String, Object> readYaml(String filePath) throws IOException {
         Yaml yaml = new Yaml();
         FileInputStream inputStream = new FileInputStream(filePath);
         return yaml.load(inputStream);

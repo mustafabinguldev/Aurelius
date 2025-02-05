@@ -92,15 +92,12 @@ public class GetResponseMediaHandler implements ResponseHandler {
         }
         System.out.println("File Size: " + mediaFile.length() + " bytes");
 
-
         // Yanıt başlıkları
         service.add("HTTP/1.1 200 OK\r\n");
         service.add("Content-Type: " + contentType + "\r\n");
         service.add("Content-Length: " + mediaFile.length() + "\r\n");
         service.add("Connection: keep-alive\r\n");
         service.add("\r\n");
-
-
     }
 
 
@@ -108,8 +105,6 @@ public class GetResponseMediaHandler implements ResponseHandler {
 
 
     private void sendErrorResponse(String errorMessage, ResponseService service) {
-
-
         service.add("HTTP/1.1 500 Internal Server Error\r\n");
         service.add("Content-Type: text/html; charset=UTF-8\r\n");
         service.add("\r\n");

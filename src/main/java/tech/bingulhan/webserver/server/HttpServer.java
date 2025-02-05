@@ -35,7 +35,7 @@ public class HttpServer {
             init();
             socketsHandler();
         }catch (Exception exception) {
-            //
+            exception.printStackTrace();
         }
     }
 

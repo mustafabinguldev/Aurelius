@@ -12,15 +12,12 @@ import java.net.Socket;
 public class GetResponseMvcHandler implements ResponseHandler {
     @Override
     public void handleResponse(ResponseService service, RequestStructure structure) {
-
-
-
         if (structure.getMethod().equals("GET")) {
+
             if (structure.getRoot().equals("/favicon.ico")) {
                 service.add("HTTP/1.1 400\r\n");
                 service.add("Content-Type: text/html; charset=UTF-8\r\n");
                 service.add("\r\n");
-
             }
 
             if (AureliusApplication.PAGES.containsKey(structure.getRoot())) {
