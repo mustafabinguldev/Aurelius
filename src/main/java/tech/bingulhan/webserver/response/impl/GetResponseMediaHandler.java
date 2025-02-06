@@ -2,15 +2,11 @@ package tech.bingulhan.webserver.response.impl;
 
 import tech.bingulhan.webserver.app.AureliusApplication;
 import tech.bingulhan.webserver.app.MediaStructure;
-import tech.bingulhan.webserver.app.PageStructure;
 import tech.bingulhan.webserver.response.RequestStructure;
 import tech.bingulhan.webserver.response.ResponseHandler;
 import tech.bingulhan.webserver.response.ResponseService;
 
 import java.io.*;
-import java.net.Socket;
-import java.net.SocketException;
-import java.nio.file.Files;
 import java.util.Optional;
 
 public class GetResponseMediaHandler implements ResponseHandler {
@@ -20,6 +16,7 @@ public class GetResponseMediaHandler implements ResponseHandler {
 
         String path = structure.getRoot();
         String fileName = getFileNameFromPath(path);
+        assert fileName != null;
         String fileExtension = getFileExtension(fileName);
 
         if (structure.getMethod().equals("GET")) {
@@ -29,6 +26,7 @@ public class GetResponseMediaHandler implements ResponseHandler {
                 service.add("\r\n");
             }
 
+            assert fileExtension != null;
             String contentType = getContentType(fileExtension);
 
             if (contentType == null) {

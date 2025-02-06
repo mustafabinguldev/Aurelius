@@ -5,7 +5,6 @@ import tech.bingulhan.webserver.server.HttpServer;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class ResponseService {
 
@@ -30,9 +29,8 @@ public class ResponseService {
         this.socketAdress = socketAdress;
         this.socket = socket;
     }
-    public ResponseService addHttpData(String htmlContext) {
+    public void addHttpData(String htmlContext) {
         this.printWriter.print(htmlContext+ "\r\n");
-        return this;
     }
 
     public ResponseService add(String txt) {
@@ -44,7 +42,7 @@ public class ResponseService {
         this.cancelled = isCancelled;
     }
 
-    public String getRequestAdress() {
+    public String getRequestAddress() {
         return this.socketAdress;
     }
     public HttpServer getWebServer() {

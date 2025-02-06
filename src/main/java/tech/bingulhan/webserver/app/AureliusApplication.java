@@ -6,7 +6,6 @@ import tech.bingulhan.webserver.server.HttpServer;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -21,8 +20,6 @@ public class AureliusApplication {
     private File foldersFile;
 
     private File settingsFile;
-
-    private HttpServer webServer;
 
     public static HashMap<String, PageStructure> PAGES;
 
@@ -135,7 +132,7 @@ public class AureliusApplication {
     }
 
     public void start() {
-        webServer = new HttpServer(port, threadSize);
+        HttpServer webServer = new HttpServer(port, threadSize);
         webServer.start();
     }
 

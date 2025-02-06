@@ -13,8 +13,8 @@ import java.net.Socket;
  */
 public class WebSocketResponse {
 
-    private Socket socket;
-    private HttpServer webServer;
+    private final Socket socket;
+    private final HttpServer webServer;
     public WebSocketResponse(HttpServer server, Socket socket){
         this.socket = socket;
         this.webServer = server;

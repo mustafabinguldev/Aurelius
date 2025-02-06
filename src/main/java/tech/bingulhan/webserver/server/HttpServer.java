@@ -1,6 +1,6 @@
 package tech.bingulhan.webserver.server;
 
-import lombok.Getter;
+
 import tech.bingulhan.webserver.response.WebSocketResponse;
 
 import java.io.IOException;
@@ -8,7 +8,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Logger;
 
 
 /**
@@ -24,9 +23,9 @@ public class HttpServer {
 
     private ExecutorService webServerService;
 
-    public HttpServer(int port, int threedSize) {
+    public HttpServer(int port, int threadSize) {
         this.port = port;
-        this.threadSize = threedSize;
+        this.threadSize = threadSize;
     }
 
     public final void start(){
@@ -45,22 +44,14 @@ public class HttpServer {
     }
 
     private void socketsHandler() throws RuntimeException, IOException{
-
         if (this.serverSocket==null || this.serverSocket.isClosed()) {
             throw new RuntimeException("Server socket is null or closed");
         }
 
         while(!serverSocket.isClosed()) {
             Socket socket = this.serverSocket.accept();
-
             HttpServer finalWebServer = this;
-
-            this.webServerService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    new WebSocketResponse(finalWebServer,socket);
-                }
-            });
+            this.webServerService.execute(() -> new WebSocketResponse(finalWebServer,socket));
         }
     }
 
