@@ -63,6 +63,10 @@ public class ResponseService {
 
     }
 
+    public PrintWriter getPrintWriter() {
+        return this.printWriter;
+    }
+
     public Socket getSocket() {
         return socket;
     }

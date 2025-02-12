@@ -1,19 +1,31 @@
-Very lightweight webserver
+#### Very lightweight webserver
 
-How can I start?
+#### How can I start?
 ```
 java -Dfile.encoding=UTF-8 -jar aurelius.jar
 ```
 
-Youtube Video:
-[![Video](https://img.youtube.com/vi/2iYVnlc3LbA/maxresdefault.jpg)](https://www.youtube.com/watch?v=2iYVnlc3LbA)
+### All frameworks and plugins supported:
+- Tailwind CSS and more css frameworks..
 
+### INFO
+Check out the releases for a sample application.
+main.html main directory is "/". All folder names under the app folder represent a root.
+You can sort your media files such as mp4, jpeg, png under the "public" folder and use them on the site. Check out the test project!
 
-Sample project directory
+#### Soon to be added (Coming soon):
+- Restful service publishing
+- Send JSON
+- Mini IOC Container
+
+#### Sample project directory
 ```
 settings.yml
 aurelius.java
 start.bat
+public
+   video1.mp4
+   image1.png
 app 
   - login
      - page.html
@@ -27,16 +39,9 @@ app
   main.css
   main.js
 ```
-main.html main directory is "/". All folder names under the app folder represent a root.
 
-All frameworks and plugins supported:
-- Tailwind CSS and more css frameworks..
+#### Youtube Video:
+[![Video](https://img.youtube.com/vi/2iYVnlc3LbA/maxresdefault.jpg)](https://www.youtube.com/watch?v=2iYVnlc3LbA)
 
-Check out the releases for a sample application.
 
-Soon to be added (Coming soon):
-- Sending img etc files (%2)
-- Restful service publishing
-- Send JSON
-- Mini IOC Container
 

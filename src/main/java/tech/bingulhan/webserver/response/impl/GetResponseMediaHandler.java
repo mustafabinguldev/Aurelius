@@ -7,6 +7,10 @@ import tech.bingulhan.webserver.response.ResponseHandler;
 import tech.bingulhan.webserver.response.ResponseService;
 
 import java.io.*;
+import java.net.*;
+import java.util.HashMap;
+
+import java.io.*;
 import java.util.Optional;
 
 public class GetResponseMediaHandler implements ResponseHandler {
@@ -88,16 +92,35 @@ public class GetResponseMediaHandler implements ResponseHandler {
             System.err.println("File does not exist: " + mediaFile.getAbsolutePath());
             return;
         }
-        System.out.println("File Size: " + mediaFile.length() + " bytes");
+        System.out.println("> File Size: " + mediaFile.length() + " bytes");
 
-        // Yanıt başlıkları
-        service.add("HTTP/1.1 200 OK\r\n");
-        service.add("Content-Type: " + contentType + "\r\n");
-        service.add("Content-Length: " + mediaFile.length() + "\r\n");
-        service.add("Connection: keep-alive\r\n");
-        service.add("\r\n");
+        // Başlıkları birleştir
+        StringBuilder responseHeaders = new StringBuilder();
+        responseHeaders.append("HTTP/1.1 200 OK\r\n");
+        responseHeaders.append("Content-Type: " + contentType + "\r\n");
+        responseHeaders.append("Content-Length: " + mediaFile.length() + "\r\n");
+        responseHeaders.append("Connection: keep-alive\r\n");
+        responseHeaders.append("\r\n"); // Başlık ve içerik arasındaki boş satır
+
+        try {
+            // Media dosyasını oku
+            byte[] data = readFile(mediaFile);
+
+            // Tüm yanıtı bir defada gönder
+            try (BufferedOutputStream out = new BufferedOutputStream(service.getSocket().getOutputStream())) {
+                out.write(responseHeaders.toString().getBytes()); // Başlıkları gönder
+                out.write(data); // Dosya verisini gönder
+                out.flush(); // Veriyi gönder
+                System.out.println("Sending file...");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Hata durumu, 500 Internal Server Error yanıtı gönder
+            service.add("HTTP/1.1 500 Internal Server Error\r\n");
+            service.add("\r\n");
+        }
     }
-
 
 
 
@@ -109,6 +132,18 @@ public class GetResponseMediaHandler implements ResponseHandler {
         service.add("<html><body><h1>" + errorMessage + "</h1></body></html>");
     }
 
+
+    private static byte[] readFile(File file) throws IOException {
+
+        if (!file.exists()) {
+            throw new FileNotFoundException("File not found: " + file.getName());
+        }
+        FileInputStream fis = new FileInputStream(file);
+        byte[] data = new byte[(int) file.length()];
+        fis.read(data);
+        fis.close();
+        return data;
+    }
 
 
 
