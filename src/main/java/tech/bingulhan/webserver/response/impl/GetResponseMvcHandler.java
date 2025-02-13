@@ -17,6 +17,7 @@ public class GetResponseMvcHandler implements ResponseHandler {
             if (structure.getRoot().equals("/favicon.ico")) {
                 service.add("HTTP/1.1 400\r\n");
                 service.add("Content-Type: text/html; charset=UTF-8\r\n");
+                service.add("Connection: close\r\n");
                 service.add("\r\n");
             }
 
@@ -24,6 +25,7 @@ public class GetResponseMvcHandler implements ResponseHandler {
 
                 service.add("HTTP/1.1 200 OK\r\n");
                 service.add("Content-Type: text/html; charset=UTF-8\r\n");
+                service.add("Connection: close\r\n");
                 service.add("\r\n");
 
                 PageStructure dom = AureliusApplication.PAGES.get(structure.getRoot());
@@ -34,6 +36,8 @@ public class GetResponseMvcHandler implements ResponseHandler {
                         "<style>\n" + cssData + "\n</style>\n" +
                                 "<script>\n" + jssData + "\n</script>\n</head>");
                 service.addHttpData(mergedData);
+                service.down();
+
             }else{
                 service.addHttpData("<h1>404</h1>");
             }

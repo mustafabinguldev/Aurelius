@@ -5,6 +5,7 @@ import tech.bingulhan.webserver.server.HttpServer;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class ResponseService {
 
@@ -29,12 +30,22 @@ public class ResponseService {
         this.socketAdress = socketAdress;
         this.socket = socket;
     }
-    public void addHttpData(String htmlContext) {
-        this.printWriter.print(htmlContext+ "\r\n");
+    public void addHttpData(String htmlContext)  {
+
+        try {
+            byte[] data = htmlContext.getBytes(StandardCharsets.UTF_8);
+            this.socket.getOutputStream().write(data);
+            this.socket.getOutputStream().flush();
+        }catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
     }
+
 
     public ResponseService add(String txt) {
         this.printWriter.print(txt);
+        this.printWriter.flush();
         return this;
     }
 
@@ -49,19 +60,33 @@ public class ResponseService {
         return webServer;
     }
 
-    public void writeDataToOutputStream(byte[] data, int offset, int length) throws IOException {
-        socket.getOutputStream().write(data, offset, length);
-        socket.getOutputStream().flush();
+
+    public void down()  {
+        try {
+            if (this.printWriter != null) {
+                this.printWriter.flush();
+            }
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (printWriter != null) {
+                printWriter.close();
+            }
+            if (socket != null && !socket.isClosed()) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
-
-    public void down() throws IOException {
-
-        reader.close();
-        printWriter.close();
-        socket.close();
-
-    }
 
     public PrintWriter getPrintWriter() {
         return this.printWriter;

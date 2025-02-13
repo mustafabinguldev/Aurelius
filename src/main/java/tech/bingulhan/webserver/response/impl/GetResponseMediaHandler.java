@@ -89,34 +89,43 @@ public class GetResponseMediaHandler implements ResponseHandler {
     private void sendMediaFileWithBufferedOutputStream(ResponseService service, MediaStructure structure, String contentType) {
         File mediaFile = new File(structure.getPath());
         if (!mediaFile.exists()) {
-            System.err.println("File does not exist: " + mediaFile.getAbsolutePath());
             return;
         }
-        System.out.println("> File Size: " + mediaFile.length() + " bytes");
 
-        // Başlıkları birleştir
         StringBuilder responseHeaders = new StringBuilder();
         responseHeaders.append("HTTP/1.1 200 OK\r\n");
         responseHeaders.append("Content-Type: " + contentType + "\r\n");
         responseHeaders.append("Content-Length: " + mediaFile.length() + "\r\n");
-        responseHeaders.append("Connection: keep-alive\r\n");
-        responseHeaders.append("\r\n"); // Başlık ve içerik arasındaki boş satır
+        responseHeaders.append("Connection: close\r\n");
+        responseHeaders.append("\r\n");
 
-        try {
-            // Media dosyasını oku
-            byte[] data = readFile(mediaFile);
+        try (BufferedOutputStream out = new BufferedOutputStream(service.getSocket().getOutputStream())) {
+            out.write(responseHeaders.toString().getBytes());
 
-            // Tüm yanıtı bir defada gönder
-            try (BufferedOutputStream out = new BufferedOutputStream(service.getSocket().getOutputStream())) {
-                out.write(responseHeaders.toString().getBytes()); // Başlıkları gönder
-                out.write(data); // Dosya verisini gönder
-                out.flush(); // Veriyi gönder
-                System.out.println("Sending file...");
+            byte[] buffer = new byte[16 * 1024];
+
+            try (FileInputStream fileInputStream = new FileInputStream(mediaFile)) {
+                int bytesRead;
+                while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+
+                    if (service.getSocket().isClosed() || !service.getSocket().isConnected()) {
+                        break;
+                    }
+                    try {
+                        out.write(buffer, 0, bytesRead);
+                    }catch (SocketException exception) {
+                        break;
+                    }
+                }
+                out.flush();
+                service.down();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                service.add("HTTP/1.1 500 Internal Server Error\r\n");
+                service.add("\r\n");
             }
-
         } catch (IOException e) {
             e.printStackTrace();
-            // Hata durumu, 500 Internal Server Error yanıtı gönder
             service.add("HTTP/1.1 500 Internal Server Error\r\n");
             service.add("\r\n");
         }

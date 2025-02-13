@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * @author BingulHan
@@ -18,6 +19,12 @@ public class WebSocketResponse {
     public WebSocketResponse(HttpServer server, Socket socket){
         this.socket = socket;
         this.webServer = server;
+
+        try {
+            socket.setSoTimeout(5000);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
 
         try {
             handleRequest();
@@ -41,9 +48,6 @@ public class WebSocketResponse {
 
         ResponseHandler.handle(responseManager, requestStructure);
 
-        out.close();
-        in.close();
-        socket.close();
     }
 
     private RequestStructure requestData(String line) {
