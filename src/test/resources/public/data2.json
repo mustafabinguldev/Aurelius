@@ -1,0 +1,35 @@
+{
+  "id": 1,
+  "name": "Örnek Restoran",
+  "location": {
+    "address": "İstiklal Caddesi No: 10, Beyoğlu, İstanbul",
+    "latitude": 41.0369,
+    "longitude": 28.9844
+  },
+  "menu": [
+    {
+      "item": "Lahmacun",
+      "price": 50.0,
+      "category": "Ana Yemek"
+    },
+    {
+      "item": "Künefe",
+      "price": 60.0,
+      "category": "Tatlı"
+    },
+    {
+      "item": "Ayran",
+      "price": 15.0,
+      "category": "İçecek"
+    }
+  ],
+  "open_hours": {
+    "monday": "09:00 - 22:00",
+    "tuesday": "09:00 - 22:00",
+    "wednesday": "09:00 - 22:00",
+    "thursday": "09:00 - 22:00",
+    "friday": "09:00 - 23:30",
+    "saturday": "10:00 - 23:30",
+    "sunday": "Kapalı"
+  }
+}

@@ -8,9 +8,7 @@ import tech.bingulhan.webserver.response.ResponseService;
 
 import java.io.*;
 import java.net.*;
-import java.util.HashMap;
 
-import java.io.*;
 import java.util.Optional;
 
 public class GetResponseMediaHandler implements ResponseHandler {
@@ -63,6 +61,11 @@ public class GetResponseMediaHandler implements ResponseHandler {
                 return "image/jpeg";
             case "mp4":
                 return "video/mp4";
+            case "yml":
+            case "yaml":
+                return "application/x-yaml";
+            case "json":
+                return "application/json";
             default:
                 return null;
         }
