@@ -11,11 +11,10 @@ java -Dfile.encoding=UTF-8 -jar aurelius.jar
 ### INFO
 Check out the releases for a sample application.
 main.html main directory is "/". All folder names under the app folder represent a root.
-You can sort your media files such as mp4, jpeg, png under the "public" folder and use them on the site. Check out the test project!
+You can sort your media files such as mp4, jpeg, png and yml, json under the "public" folder and use them on the site. Check out the test project!
 
 #### Soon to be added (Coming soon):
 - Restful service publishing
-- Send JSON
 - Mini IOC Container
 
 #### Sample project directory
