@@ -132,7 +132,7 @@ public class AureliusApplication {
     }
 
     public void start() {
-        HttpServer webServer = new HttpServer(port, threadSize);
+        HttpServer webServer = new HttpServer(port);
         webServer.start();
     }
 

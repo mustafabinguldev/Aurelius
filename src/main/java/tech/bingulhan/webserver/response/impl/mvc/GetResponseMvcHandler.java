@@ -8,6 +8,9 @@ import tech.bingulhan.webserver.response.ResponseService;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GetResponseMvcHandler implements ResponseHandler {
     @Override
@@ -32,7 +35,12 @@ public class GetResponseMvcHandler implements ResponseHandler {
                 String cssData = dom.getPageCssData();
                 String jssData = dom.getPageJsData();
                 String htmlData = dom.getPageData();
-                String mergedData = htmlData.replace("</head>",
+
+                //Coming soon
+                Map<String, String> valuesMap = new HashMap<>();
+                valuesMap.put("%version%", "pre-v0.2.2");
+
+                String mergedData = MvcPlaceHolderService.replacePlaceholders(htmlData, valuesMap).replace("</head>",
                         "<style>\n" + cssData + "\n</style>\n" +
                                 "<script>\n" + jssData + "\n</script>\n</head>");
                 service.addHttpData(mergedData);
