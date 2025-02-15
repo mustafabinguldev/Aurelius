@@ -16,12 +16,11 @@ public class HttpServer {
 
     private ServerSocket serverSocket;
     private final int port;
-    private final int threadSize;
+
     private ExecutorService webServerService;
 
-    public HttpServer(int port, int threadSize) {
+    public HttpServer(int port) {
         this.port = port;
-        this.threadSize = threadSize;
     }
 
     public final void start() {

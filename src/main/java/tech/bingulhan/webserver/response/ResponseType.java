@@ -1,7 +1,7 @@
 package tech.bingulhan.webserver.response;
 
-import tech.bingulhan.webserver.response.impl.GetResponseMediaHandler;
-import tech.bingulhan.webserver.response.impl.GetResponseMvcHandler;
+import tech.bingulhan.webserver.response.impl.media.GetResponseMediaHandler;
+import tech.bingulhan.webserver.response.impl.mvc.GetResponseMvcHandler;
 
 public enum ResponseType {
 

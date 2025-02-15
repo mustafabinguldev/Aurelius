@@ -1,4 +1,4 @@
-package tech.bingulhan.webserver.response.impl;
+package tech.bingulhan.webserver.response.impl.mvc;
 
 import tech.bingulhan.webserver.app.AureliusApplication;
 import tech.bingulhan.webserver.app.PageStructure;

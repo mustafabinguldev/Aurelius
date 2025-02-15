@@ -1,4 +1,4 @@
-package tech.bingulhan.webserver.response.impl;
+package tech.bingulhan.webserver.response.impl.media;
 
 import tech.bingulhan.webserver.app.AureliusApplication;
 import tech.bingulhan.webserver.app.MediaStructure;
@@ -9,6 +9,7 @@ import tech.bingulhan.webserver.response.ResponseService;
 import java.io.*;
 import java.net.*;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 public class GetResponseMediaHandler implements ResponseHandler {
@@ -29,12 +30,10 @@ public class GetResponseMediaHandler implements ResponseHandler {
             }
 
             assert fileExtension != null;
-            String contentType = getContentType(fileExtension);
+            Optional<ResponseMediaType> mediaType = Arrays.stream(ResponseMediaType.values()).filter(mt->mt.getExtension().equals(fileExtension)).findAny();
 
-            if (contentType == null) {
+            if (!mediaType.isPresent()) {
                 sendErrorResponse("Not supported.", service);
-
-
                 return;
             }
 
@@ -42,51 +41,15 @@ public class GetResponseMediaHandler implements ResponseHandler {
                     stream().filter(media -> media.getName().equals(fileName)).findAny();
 
             if (mediaStructure.isPresent()) {
-                sendMediaFileWithBufferedOutputStream(service, mediaStructure.get(), contentType);
+                sendMediaFileWithBufferedOutputStream(service, mediaStructure.get(), mediaType.get().getContentType());
 
             }else{
                 sendErrorResponse("File not found", service);
-
             }
         }
     }
 
 
-    private String getContentType(String extension) {
-        switch (extension) {
-            case "png":
-                return "image/png";
-            case "jpeg":
-            case "jpg":
-                return "image/jpeg";
-            case "mp4":
-                return "video/mp4";
-            case "yml":
-            case "yaml":
-                return "application/x-yaml";
-            case "json":
-                return "application/json";
-            default:
-                return null;
-        }
-    }
-
-
-    private String getFileNameFromPath(String path) {
-        int lastSlashIndex = path.lastIndexOf('/');
-        if (lastSlashIndex == -1) {
-            return null;
-        }
-        return path.substring(lastSlashIndex + 1);
-    }
-
-    private String getFileExtension(String fileName) {
-        int lastDotIndex = fileName.lastIndexOf('.');
-        if (lastDotIndex == -1) {
-            return null;
-        }
-        return fileName.substring(lastDotIndex + 1).toLowerCase();
-    }
 
 
     private void sendMediaFileWithBufferedOutputStream(ResponseService service, MediaStructure structure, String contentType) {
@@ -105,7 +68,7 @@ public class GetResponseMediaHandler implements ResponseHandler {
         try (BufferedOutputStream out = new BufferedOutputStream(service.getSocket().getOutputStream())) {
             out.write(responseHeaders.toString().getBytes());
 
-            byte[] buffer = new byte[16 * 1024];
+            byte[] buffer = new byte[8 * 1024];
 
             try (FileInputStream fileInputStream = new FileInputStream(mediaFile)) {
                 int bytesRead;
@@ -134,31 +97,29 @@ public class GetResponseMediaHandler implements ResponseHandler {
         }
     }
 
-
-
-
     private void sendErrorResponse(String errorMessage, ResponseService service) {
         service.add("HTTP/1.1 500 Internal Server Error\r\n");
         service.add("Content-Type: text/html; charset=UTF-8\r\n");
         service.add("\r\n");
         service.add("<html><body><h1>" + errorMessage + "</h1></body></html>");
+        service.down();
+
     }
 
-
-    private static byte[] readFile(File file) throws IOException {
-
-        if (!file.exists()) {
-            throw new FileNotFoundException("File not found: " + file.getName());
+    private String getFileNameFromPath(String path) {
+        int lastSlashIndex = path.lastIndexOf('/');
+        if (lastSlashIndex == -1) {
+            return null;
         }
-        FileInputStream fis = new FileInputStream(file);
-        byte[] data = new byte[(int) file.length()];
-        fis.read(data);
-        fis.close();
-        return data;
+        return path.substring(lastSlashIndex + 1);
     }
 
-
-
-
+    private String getFileExtension(String fileName) {
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex == -1) {
+            return null;
+        }
+        return fileName.substring(lastDotIndex + 1).toLowerCase();
+    }
 
 }
