@@ -29,6 +29,17 @@ title: "Aurelius"
 
 ```
 
+## Media Support:
+### main.html
+```
+<img src="/public/example.png" alt="Example image" />
+```
+### folder:
+``` 
+public
+   example.png
+```
+
 ## Info
 Check out the releases for a sample application.
 main.html main directory is "/". All folder names under the app folder represent a root.
