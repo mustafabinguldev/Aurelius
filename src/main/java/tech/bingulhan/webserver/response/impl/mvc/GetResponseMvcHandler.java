@@ -37,10 +37,7 @@ public class GetResponseMvcHandler implements ResponseHandler {
                 String htmlData = dom.getPageData();
 
                 //Coming soon
-                Map<String, String> valuesMap = new HashMap<>();
-                valuesMap.put("%version%", "pre-v0.2.2");
-
-                String mergedData = MvcPlaceHolderService.replacePlaceholders(htmlData, valuesMap).replace("</head>",
+                String mergedData = MvcPlaceHolderService.replacePlaceholders(htmlData, AureliusApplication.PLACEHOLDERS).replace("</head>",
                         "<style>\n" + cssData + "\n</style>\n" +
                                 "<script>\n" + jssData + "\n</script>\n</head>");
                 service.addHttpData(mergedData);

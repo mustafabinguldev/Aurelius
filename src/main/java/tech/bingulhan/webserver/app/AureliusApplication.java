@@ -20,8 +20,10 @@ public class AureliusApplication {
     private File foldersFile;
 
     private File settingsFile;
+    private File placeholdersFile;
 
     public static HashMap<String, PageStructure> PAGES;
+    public static HashMap<String, String> PLACEHOLDERS;
 
     public static List<MediaStructure> MEDIA_STRUCTURES;
 
@@ -36,11 +38,23 @@ public class AureliusApplication {
     }
     public void init() {
         settingsFile = new File(applicationFolder, "settings.yml");
+        placeholdersFile = new File(applicationFolder, "placeholders.yml");
+
 
         if (!settingsFile.exists()) {
             System.err.println("settings.yml not found.");
             return;
         }
+
+        if (!placeholdersFile.exists()) {
+            System.err.println("placeholders.yml not found.");
+            try {
+                placeholdersFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
 
         foldersFile = new File(applicationFolder, "app");
         if (!foldersFile.exists()) {
@@ -55,6 +69,7 @@ public class AureliusApplication {
 
         PAGES = new HashMap<>();
         MEDIA_STRUCTURES = new ArrayList<>();
+        PLACEHOLDERS = new HashMap<>();
 
 
         try {
@@ -70,6 +85,7 @@ public class AureliusApplication {
         pagesLoad();
         mediaFilesLoad();
         readSettingsYml();
+        readPlaceholders();
         start();
     }
 
@@ -110,6 +126,28 @@ public class AureliusApplication {
             }
         }
     }
+    public void readPlaceholders() {
+        try {
+            Map<String, Object> placeholders = readYaml(placeholdersFile.getAbsolutePath());
+
+            if (placeholders == null) {
+                return;
+            }
+            if (!placeholders.isEmpty()) {
+                placeholders.keySet().forEach(placeholder -> {
+                    PLACEHOLDERS.put("%"+placeholder+"%", placeholders.get(placeholder).toString());
+                });
+            }
+
+
+            System.out.println("Placeholders: " + PLACEHOLDERS.size());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public void readSettingsYml() {
         try {
             Map<String, Object> settings = readYaml(settingsFile.getAbsolutePath());
@@ -124,6 +162,7 @@ public class AureliusApplication {
             e.printStackTrace();
         }
     }
+
 
     public Map<String, Object> readYaml(String filePath) throws IOException {
         Yaml yaml = new Yaml();
