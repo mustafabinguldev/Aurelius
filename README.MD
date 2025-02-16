@@ -1,19 +1,37 @@
 # Very lightweight webserver
 
-## How can I start?
+
+### Example Project
+#### [Go to project](https://github.com/mustafabinguldev/aurelius-example-project)
+
+
+### All frameworks and plugins supported:
+- Tailwind CSS, Bootstrap and more css frameworks..
+
+### Container usage:
+#### main.html:
 ```
-java -Dfile.encoding=UTF-8 -jar aurelius.jar
+<html>
+<body>
+
+<h1>Example Text</h1>
+<container.button></container.button>
+
+</body>
+</html>
+```
+#### containers/button.html
+```
+<button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+Example Button</button>
 ```
 
-## All frameworks and plugins supported:
-- Tailwind CSS and more css frameworks..
-
-## Placeholder usage:
-### placeholders.yml:
+### Placeholder usage:
+#### placeholders.yml:
 ```
 title: "Aurelius"
 ```
-### main.html
+#### main.html
 ```
 <!DOCTYPE html>
 <html>
@@ -29,27 +47,27 @@ title: "Aurelius"
 
 ```
 
-## Media Support:
-### main.html
+### Media Support:
+#### main.html
 ```
 <img src="/public/example.png" alt="Example image" />
 ```
-### folder:
+#### folder:
 ``` 
 public
    example.png
 ```
 
-## Info
+### Learn before you start
 Check out the releases for a sample application.
 main.html main directory is "/". All folder names under the app folder represent a root.
 You can sort your media files such as mp4, jpeg, png and yml, json under the "public" folder and use them on the site. Check out the test project!
 
-## Soon to be added (Coming soon):
+### Soon to be added (Coming soon):
 - Restful service publishing
 - Mini IOC Container
 
-## Sample project directory
+### Sample project directory
 ```
 settings.yml
 aurelius.java
@@ -61,7 +79,7 @@ public
    data1.json
    data2.yaml
 app 
-  - page1 # domoin.com/page1
+  - page1 # host:port/page1
      - page.html
      - page.css
      - page.js
