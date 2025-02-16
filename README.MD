@@ -1,8 +1,12 @@
 # Very lightweight webserver
 
 
-### Example Project
-#### [Go to project](https://github.com/mustafabinguldev/aurelius-example-project)
+### Learn before you start
+Check out the releases for a sample application.
+main.html main directory is "/". All folder names under the app folder represent a root.
+You can sort your media files such as mp4, jpeg, png and yml, json under the "public" folder and use them on the site. Check out the test project!
+#### Example Project: [Go to project](https://github.com/mustafabinguldev/aurelius-example-project)
+
 
 
 ### All frameworks and plugins supported:
@@ -58,32 +62,4 @@ public
    example.png
 ```
 
-### Learn before you start
-Check out the releases for a sample application.
-main.html main directory is "/". All folder names under the app folder represent a root.
-You can sort your media files such as mp4, jpeg, png and yml, json under the "public" folder and use them on the site. Check out the test project!
 
-### Soon to be added (Coming soon):
-- Restful service publishing
-- Mini IOC Container
-
-### Sample project directory
-```
-settings.yml
-aurelius.java
-start.bat
-placeholders.yml
-public
-   video1.mp4
-   image1.png
-   data1.json
-   data2.yaml
-app 
-  - page1 # host:port/page1
-     - page.html
-     - page.css
-     - page.js
-  main.html
-  main.css
-  main.js
-```
