@@ -44,7 +44,7 @@ public class WebSocketResponse {
 
 
         ResponseService responseManager =
-                new ResponseService(in,out,webServer,socket.getRemoteSocketAddress().toString(), socket);
+                new ResponseService(webServer.getApplication(), in,out,webServer,socket.getRemoteSocketAddress().toString(), socket);
 
         ResponseHandler.handle(responseManager, requestStructure);
 

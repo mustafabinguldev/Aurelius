@@ -1,6 +1,7 @@
 package tech.bingulhan.webserver.response;
 
 import lombok.Getter;
+import tech.bingulhan.webserver.app.AureliusApplication;
 import tech.bingulhan.webserver.server.HttpServer;
 
 import java.io.*;
@@ -23,12 +24,16 @@ public class ResponseService {
 
     private Socket socket;
 
-    public ResponseService(BufferedReader reader,PrintWriter printWriter, HttpServer webServer, String socketAdress, Socket socket) {
+    @Getter
+    private AureliusApplication application;
+
+    public ResponseService(AureliusApplication application, BufferedReader reader, PrintWriter printWriter, HttpServer webServer, String socketAdress, Socket socket) {
         this.reader = reader;
         this.printWriter = printWriter;
         this.webServer = webServer;
         this.socketAdress = socketAdress;
         this.socket = socket;
+        this.application = application;
     }
     public void addHttpData(String htmlContext)  {
 

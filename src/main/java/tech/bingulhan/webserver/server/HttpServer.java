@@ -1,5 +1,7 @@
 package tech.bingulhan.webserver.server;
 
+import lombok.Getter;
+import tech.bingulhan.webserver.app.AureliusApplication;
 import tech.bingulhan.webserver.response.WebSocketResponse;
 
 import java.io.IOException;
@@ -19,8 +21,12 @@ public class HttpServer {
 
     private ExecutorService webServerService;
 
-    public HttpServer(int port) {
+    @Getter
+    private AureliusApplication application;
+
+    public HttpServer(AureliusApplication application, int port) {
         this.port = port;
+        this.application = application;
     }
 
     public final void start() {

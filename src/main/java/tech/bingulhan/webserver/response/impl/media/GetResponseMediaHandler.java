@@ -37,7 +37,7 @@ public class GetResponseMediaHandler implements ResponseHandler {
                 return;
             }
 
-            Optional<MediaStructure> mediaStructure = AureliusApplication.MEDIA_STRUCTURES.
+            Optional<MediaStructure> mediaStructure = service.getApplication().getData().getMediaStructures().
                     stream().filter(media -> media.getName().equals(fileName)).findAny();
 
             if (mediaStructure.isPresent()) {
@@ -96,6 +96,9 @@ public class GetResponseMediaHandler implements ResponseHandler {
             service.add("\r\n");
         }
     }
+
+
+
 
     private void sendErrorResponse(String errorMessage, ResponseService service) {
         service.add("HTTP/1.1 500 Internal Server Error\r\n");
