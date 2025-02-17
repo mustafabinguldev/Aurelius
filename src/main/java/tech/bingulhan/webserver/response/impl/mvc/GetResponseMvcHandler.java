@@ -1,18 +1,17 @@
 package tech.bingulhan.webserver.response.impl.mvc;
 
-import tech.bingulhan.webserver.app.AureliusApplication;
 import tech.bingulhan.webserver.app.ContainerStructure;
 import tech.bingulhan.webserver.app.PageStructure;
 import tech.bingulhan.webserver.response.RequestStructure;
 import tech.bingulhan.webserver.response.ResponseHandler;
 import tech.bingulhan.webserver.response.ResponseService;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.time.LocalDate;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import java.util.regex.*;
 
 public class GetResponseMvcHandler implements ResponseHandler {
     @Override
@@ -39,13 +38,33 @@ public class GetResponseMvcHandler implements ResponseHandler {
                 String htmlData = dom.getPageData();
 
                 List<ContainerStructure> containerStructures = service.getApplication().getData().getContainerStructures();
-                for (ContainerStructure containerStructure : containerStructures) {
-                    htmlData = htmlData.replaceAll("<container\\."+containerStructure.getName()+"></container\\."+containerStructure.getName()+">", containerStructure.getHtmlData());
+
+                for (int i = 0; i < containerStructures.size(); i++) {
+                    for (ContainerStructure containerStructure : containerStructures) {
+                        Pattern pattern = Pattern.compile("<container\\." + containerStructure.getName() + "([^>]*)></container\\." + containerStructure.getName() + ">");
+                        Matcher matcher = pattern.matcher(htmlData);
+                        if (matcher.find()) {
+                            String attributesString = matcher.group(1);
+                            Map<String, String> attributes = new HashMap<>();
+                            Pattern attrPattern = Pattern.compile("(\\w+)=\"(.*?)\"");
+                            Matcher attrMatcher = attrPattern.matcher(attributesString);
+                            while (attrMatcher.find()) {
+                                attributes.put(attrMatcher.group(1), attrMatcher.group(2));
+                            }
+                            String updatedHtml = containerStructure.getHtmlData();
+                            for (Map.Entry<String, String> entry : attributes.entrySet()) {
+                                updatedHtml = updatedHtml.replace("{" + entry.getKey() + "}", entry.getValue());
+                            }
+                            updatedHtml = updatedHtml.replaceAll("\\{\\w+}", "");
+                            htmlData = htmlData.replace(matcher.group(0), updatedHtml);
+                        }
+                    }
                 }
 
                 String mergedData = MvcPlaceHolderService.replacePlaceholders(htmlData, service.getApplication().getData().getPlaceholders()).replace("</head>",
                         "<style>\n" + cssData + "\n</style>\n" +
                                 "<script>\n" + jssData + "\n</script>\n</head>");
+
                 service.addHttpData(mergedData);
                 service.down();
 

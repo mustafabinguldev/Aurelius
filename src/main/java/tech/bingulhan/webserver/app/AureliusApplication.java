@@ -22,15 +22,16 @@ public class AureliusApplication {
 
     public AureliusApplication(File file) {
 
-        data = new AureliusApplicationData(this);
-
         if (!file.exists()){
             System.err.println("The home directory could not be read.");
             return;
         }
 
         applicationFolder = file;
+
+        data = new AureliusApplicationData(this);
         init();
+
     }
 
     public void init() {
