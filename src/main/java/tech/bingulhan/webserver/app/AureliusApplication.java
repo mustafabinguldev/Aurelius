@@ -30,7 +30,10 @@ public class AureliusApplication {
         applicationFolder = file;
 
         data = new AureliusApplicationData(this);
-        init();
+
+        if (data.isLoad()) {
+            init();
+        }
 
     }
 

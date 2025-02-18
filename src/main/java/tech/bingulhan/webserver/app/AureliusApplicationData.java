@@ -31,11 +31,16 @@ public class AureliusApplicationData {
 
     private AureliusApplicationPathData pathData;
 
+    private boolean isLoad = false;
+
     public AureliusApplicationData(AureliusApplication application) {
         this.application = application;
 
         pathData = new AureliusApplicationPathData(this);
-        init();
+
+        if (pathData.isLoad()) {
+            init();
+        }
 
     }
 
@@ -45,17 +50,19 @@ public class AureliusApplicationData {
         placeholders = new HashMap<>();
         containerStructures = new ArrayList<>();
 
+        loadContainers();
+        loadMediaFiles();
+        loadPages();
+
         try {
             readPageData("/","main",new File(pathData.getFoldersFile(),
                             "main.html"), new File(pathData.getFoldersFile(), "main.css"),
                     new File(pathData.getFoldersFile(),"main.js"));
         } catch (IOException e) {
-            e.printStackTrace();
+            return;
         }
 
-        loadContainers();
-        loadMediaFiles();
-        loadPages();
+        isLoad = true;
 
     }
 

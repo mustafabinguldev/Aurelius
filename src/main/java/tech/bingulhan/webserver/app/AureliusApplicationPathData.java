@@ -3,9 +3,15 @@ package tech.bingulhan.webserver.app;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -21,6 +27,8 @@ public class AureliusApplicationPathData {
     private File settingsFile;
     private File placeholdersFile;
 
+    private boolean isLoad = false;
+
     public AureliusApplicationPathData(AureliusApplicationData data) {
         this.data = data;
         init();
@@ -32,12 +40,33 @@ public class AureliusApplicationPathData {
         containersFolder = new File(data.getApplication().getApplicationFolder(), "containers");
 
         if (!settingsFile.exists()) {
-            System.err.println("settings.yml not found.");
-            return;
+            System.err.println("settings.yml not found. Loading now..");
+            try {
+                settingsFile.createNewFile();
+
+                DumperOptions options = new DumperOptions();
+                options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+                Yaml yaml = new Yaml(options);
+
+                Map<String, Object> serverConfig = new HashMap<>();
+                Map<String, Object> dataC = new HashMap<>();
+                dataC.put("port", 8080);
+                dataC.put("threadSize", 3);
+
+                serverConfig.put("server", dataC);
+
+                try (FileWriter writer = new FileWriter(settingsFile)) {
+                    yaml.dump(serverConfig, writer);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
 
         if (!placeholdersFile.exists()) {
-            System.err.println("placeholders.yml not found.");
+            System.err.println("placeholders.yml not found. Loading now..");
             try {
                 placeholdersFile.createNewFile();
             } catch (IOException e) {
@@ -46,14 +75,24 @@ public class AureliusApplicationPathData {
         }
 
         foldersFile = new File(data.getApplication().getApplicationFolder(), "app");
+
         if (!foldersFile.exists()) {
-            System.err.println("App folder not found.");
-            return;
+            System.err.println("App folder not found. Loading now..");
+            foldersFile.mkdir();
+
         }
 
-        if (!new File(foldersFile, "main.html").exists()) {
-            System.err.println("Home page not found.");
-            return;
+        File mainHtml = new File(foldersFile, "main.html");
+        if (!mainHtml.exists()) {
+            System.err.println("Home page not found. Loading now..");
+            try {
+                mainHtml.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
+
+        isLoad = true;
     }
 }
