@@ -67,4 +67,28 @@ public
    example.png
 ```
 
+### Prerequisites
+
+Before you begin, ensure that you have the following software installed on your local machine:
+
+- **Java 8 or later**: Aurelius is built using Java, so you need to have Java installed on your system. To check if Java is installed, run the following command:
+
+    ```bash
+    java -version
+    ```
+
+  If Java is not installed, download and install it from the official [Java website](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
+
+### Installation
+
+Follow these steps to set up Aurelius on your machine:
+
+- **1**. Download the latest version from Releases, download the jar file [Download](https://github.com/mustafabinguldev/Aurelius/releases)
+- **2**. Put the jar in an empty folder.
+- **3**. Create a bat file and paste the launch code and then launch it.
+``` bash
+java -Dfile.encoding=UTF-8 -jar aurelius.jar
+```
+
+
 
