@@ -2,6 +2,7 @@ package tech.bingulhan.webserver.app;
 
 import lombok.Getter;
 import org.yaml.snakeyaml.Yaml;
+import tech.bingulhan.webserver.app.ui.ApplicationUI;
 import tech.bingulhan.webserver.server.HttpServer;
 
 import java.io.File;
@@ -14,33 +15,58 @@ public class AureliusApplication {
     @Getter
     private File applicationFolder;
 
+    @Getter
     private int port;
     private int threadSize;
 
     @Getter
+    private boolean ui = false;
+
+    @Getter
     private AureliusApplicationData data;
 
-    public AureliusApplication(File file) {
+    @Getter
+    private ApplicationUI applicationUI;
 
+    private static AureliusApplication instance;
+
+    private HttpServer server;
+
+    public static synchronized AureliusApplication getInstance() {
+        return instance;
+    }
+
+
+    public void stop() {
+        server.shutdown();
+    }
+
+
+    public AureliusApplication(File file, String[] args) {
+
+        instance = this;
         if (!file.exists()){
             System.err.println("The home directory could not be read.");
             return;
         }
+
+        applicationUI = new ApplicationUI();
+
 
         applicationFolder = file;
 
         data = new AureliusApplicationData(this);
 
         if (data.isLoad()) {
-            init();
-        }
+            init(args);
+         }
 
     }
 
-    public void init() {
+    public void init(String[] args) {
         readSettingsYml();
         readPlaceholders();
-        start();
+        start(args);
     }
 
     public void readPlaceholders() {
@@ -72,9 +98,13 @@ public class AureliusApplication {
             Map<String, Object> serverSettings = (Map<String, Object>) settings.get("server");
             port = (int) serverSettings.get("port");
             threadSize = (int) serverSettings.get("threadSize");
+            ui = (Boolean) serverSettings.get("ui");
+
 
             System.out.println("Server Port: " + port);
             System.out.println("Thread Size: " + threadSize);
+            System.out.println("UI: " + ui);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,9 +117,10 @@ public class AureliusApplication {
         return yaml.load(inputStream);
     }
 
-    public void start() {
-        HttpServer webServer = new HttpServer(this,port);
-        webServer.start();
+    public void start(String[] args) {
+
+        server = new HttpServer(this,port, args);
+        server.start();
     }
 
 

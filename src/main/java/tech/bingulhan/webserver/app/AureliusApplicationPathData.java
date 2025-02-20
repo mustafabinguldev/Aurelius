@@ -52,6 +52,7 @@ public class AureliusApplicationPathData {
                 Map<String, Object> dataC = new HashMap<>();
                 dataC.put("port", 8080);
                 dataC.put("threadSize", 3);
+                dataC.put("ui", true);
 
                 serverConfig.put("server", dataC);
 

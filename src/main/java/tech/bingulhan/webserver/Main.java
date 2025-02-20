@@ -8,6 +8,6 @@ public class Main {
 
     public static void main(String[] args) {
         String workingDirectory = System.getProperty("user.dir");
-        new AureliusApplication(new File(workingDirectory));
+        new AureliusApplication(new File(workingDirectory), args);
     }
 }

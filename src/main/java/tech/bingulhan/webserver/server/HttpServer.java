@@ -24,9 +24,12 @@ public class HttpServer {
     @Getter
     private AureliusApplication application;
 
-    public HttpServer(AureliusApplication application, int port) {
+    String[] args;
+
+    public HttpServer(AureliusApplication application, int port, String[] args) {
         this.port = port;
         this.application = application;
+        this.args = args;
     }
 
     public final void start() {
@@ -44,6 +47,11 @@ public class HttpServer {
     private void init() throws IOException {
         serverSocket = new ServerSocket(this.port);
         System.out.println("Server started on port: " + this.port);
+
+        if (application.isUi()) {
+            this.webServerService.execute(() -> application.getApplicationUI().load(args));
+        }
+
     }
 
 
@@ -71,6 +79,7 @@ public class HttpServer {
             if (serverSocket != null && !serverSocket.isClosed()) {
                 serverSocket.close();
             }
+            System.exit(0);
             shutdownExecutorService();
         } catch (IOException e) {
             e.printStackTrace();
