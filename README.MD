@@ -67,6 +67,13 @@ public
    example.png
 ```
 
+### settings.yml
+ ```
+server:
+   port: 8080
+   threadSize: 2
+   ui: true
+ ```
 ### Prerequisites
 
 Before you begin, ensure that you have the following software installed on your local machine:
@@ -83,12 +90,17 @@ Before you begin, ensure that you have the following software installed on your 
 
 Follow these steps to set up Aurelius on your machine:
 
+**Windows**
+- **1**  Download the latest version from Releases, download the exe file [Download](https://github.com/mustafabinguldev/Aurelius/releases)
+- **2**  Put the jar in an empty folder.
+- **3**  Launch the exe file and it's that simple!
+
+**All Platforms**
 - **1**. Download the latest version from Releases, download the jar file [Download](https://github.com/mustafabinguldev/Aurelius/releases)
 - **2**. Put the jar in an empty folder.
 - **3**. Create a bat file and paste the launch code and then launch it.
 ``` bash
 java -Dfile.encoding=UTF-8 -jar aurelius.jar
 ```
-
 
 
