@@ -44,7 +44,7 @@ public class AureliusApplicationData {
 
     }
 
-    private void init() {
+    public void loadData() {
         pages = new HashMap<>();
         mediaStructures = new ArrayList<>();
         placeholders = new HashMap<>();
@@ -59,11 +59,14 @@ public class AureliusApplicationData {
                             "main.html"), new File(pathData.getFoldersFile(), "main.css"),
                     new File(pathData.getFoldersFile(),"main.js"));
         } catch (IOException e) {
-            return;
+            e.printStackTrace();
         }
 
-        isLoad = true;
+    }
 
+    private void init() {
+        loadData();
+        isLoad = true;
     }
 
 

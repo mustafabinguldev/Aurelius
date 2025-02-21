@@ -4,6 +4,7 @@ import lombok.Getter;
 import tech.bingulhan.webserver.app.AureliusApplication;
 import tech.bingulhan.webserver.response.WebSocketResponse;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -38,7 +39,8 @@ public class HttpServer {
             init();
             socketsHandler();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Aurelius cannot be opened with "+AureliusApplication.getInstance().getPort()+" port.");
+            JOptionPane.showMessageDialog(null, "Aurelius cannot be opened with "+AureliusApplication.getInstance().getPort()+" port.", "Error", JOptionPane.ERROR_MESSAGE);
             shutdown();
         }
     }
@@ -57,6 +59,7 @@ public class HttpServer {
 
     private void socketsHandler() {
         if (this.serverSocket == null || this.serverSocket.isClosed()) {
+            JOptionPane.showMessageDialog(null, "Server socket is null or closed", "Error", JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException("Server socket is null or closed");
         }
 
