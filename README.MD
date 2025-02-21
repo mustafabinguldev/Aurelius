@@ -7,6 +7,34 @@ main.html main directory is "/". All folder names under the app folder represent
 You can sort your media files such as mp4, jpeg, png and yml, json under the "public" folder and use them on the site. Check out the test project!
 #### Example Project: [Go to project](https://github.com/mustafabinguldev/aurelius-example-project)
 
+### Prerequisites
+
+Before you begin, ensure that you have the following software installed on your local machine:
+
+- **Java 8 or later**: Aurelius is built using Java, so you need to have Java installed on your system. To check if Java is installed, run the following command:
+
+    ```bash
+    java -version
+    ```
+
+  If Java is not installed, download and install it from the official [Java website](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
+
+### Installation
+
+Follow these steps to set up Aurelius on your machine:
+
+**Windows**
+- **1**  Download the latest version from Releases, download the exe file [Download](https://github.com/mustafabinguldev/Aurelius/releases)
+- **2**  Put the jar in an empty folder.
+- **3**  Launch the exe file and it's that simple!
+
+**All Platforms**
+- **1**. Download the latest version from Releases, download the jar file [Download](https://github.com/mustafabinguldev/Aurelius/releases)
+- **2**. Put the jar in an empty folder.
+- **3**. Create a bat file and paste the launch code and then launch it.
+``` bash
+java -Dfile.encoding=UTF-8 -jar aurelius.jar
+```
 
 
 ### All frameworks and plugins supported:
@@ -67,28 +95,11 @@ public
    example.png
 ```
 
-### Prerequisites
-
-Before you begin, ensure that you have the following software installed on your local machine:
-
-- **Java 8 or later**: Aurelius is built using Java, so you need to have Java installed on your system. To check if Java is installed, run the following command:
-
-    ```bash
-    java -version
-    ```
-
-  If Java is not installed, download and install it from the official [Java website](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
-
-### Installation
-
-Follow these steps to set up Aurelius on your machine:
-
-- **1**. Download the latest version from Releases, download the jar file [Download](https://github.com/mustafabinguldev/Aurelius/releases)
-- **2**. Put the jar in an empty folder.
-- **3**. Create a bat file and paste the launch code and then launch it.
-``` bash
-java -Dfile.encoding=UTF-8 -jar aurelius.jar
-```
-
-
+### settings.yml
+ ```
+server:
+   port: 8080
+   threadSize: 2
+   ui: true
+ ```
 
