@@ -1,5 +1,14 @@
 # Very lightweight webserver
 
+### Features
+- **1.** Easy Setup: Simple installation process with Java 8 or later.
+- **2.** Web Development Support: Supports Tailwind CSS, Bootstrap, and other CSS frameworks.
+- **3.** Container System: Allows dynamic content generation using containers such as buttons and sections.
+- **4.** Media Support: Handles various media files like mp4, jpeg, png, yml, and json through a public folder.
+- **5.** Placeholder System: Supports placeholders like %title% in HTML files, which can be replaced dynamically.
+- **6.** Configurable Server Settings: Allows configuration of server settings such as port and thread size via a settings.yml file.
+- **7.** Built-in UI: Provides a user interface with an option for easy server management (start, stop, reload).
+- **8.** Cross-platform: Works across all platforms with executable and JAR versions
 
 ### Learn before you start
 Check out the releases for a sample application.
