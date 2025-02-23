@@ -76,7 +76,7 @@ public class ApplicationUI extends Application {
         Scene scene = new Scene(root, 600, 400);
 
         stage.setOnCloseRequest(event -> AureliusApplication.getInstance().stop());
-        stage.setTitle("Aurelius 0.4.6 - Server Status");
+        stage.setTitle("Aurelius 0.5 - Server Status");
         stage.setScene(scene);
         stage.setResizable(false);
 

@@ -3,7 +3,7 @@ package tech.bingulhan.webserver.app;
 import lombok.Getter;
 import org.yaml.snakeyaml.Yaml;
 import tech.bingulhan.webserver.app.ui.ApplicationUI;
-import tech.bingulhan.webserver.server.HttpServer;
+import tech.bingulhan.webserver.server.HttpNettyServer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +30,7 @@ public class AureliusApplication {
 
     private static AureliusApplication instance;
 
-    private HttpServer server;
+    private HttpNettyServer server;
 
     public static synchronized AureliusApplication getInstance() {
         return instance;
@@ -118,10 +118,11 @@ public class AureliusApplication {
     }
 
     public void start(String[] args) {
-
-        server = new HttpServer(this,port, args);
+        server= new HttpNettyServer(this, args);
         server.start();
     }
+
+
 
 
 }
