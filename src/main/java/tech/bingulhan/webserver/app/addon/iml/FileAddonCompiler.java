@@ -41,7 +41,6 @@ public class FileAddonCompiler implements AddonCompiler {
     }
 
     private void registerAddon(File jarFile) throws Exception {
-        System.out.println("kayıt ediliyor.");
         URL jarUrl = jarFile.toURI().toURL();
         URLClassLoader classLoader = new URLClassLoader(new URL[]{jarUrl});
 
@@ -60,12 +59,7 @@ public class FileAddonCompiler implements AddonCompiler {
                 Addon addonInstance = (Addon) addonClass.getDeclaredConstructor().newInstance();
                 addonInstance.onEnable();
                 AureliusApplication.getInstance().getAddons().add(addonInstance);
-                System.out.println("Addon başarıyla çalıştırıldı.");
-            } else {
-                System.out.println("Bu sınıf bir Addon değil!");
             }
-        } else {
-            System.out.println("addon.main anahtarı bulunamadı.");
         }
 
     }
