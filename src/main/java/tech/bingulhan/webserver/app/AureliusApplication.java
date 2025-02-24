@@ -2,6 +2,9 @@ package tech.bingulhan.webserver.app;
 
 import lombok.Getter;
 import org.yaml.snakeyaml.Yaml;
+import tech.bingulhan.webserver.app.addon.Addon;
+import tech.bingulhan.webserver.app.addon.AddonCompiler;
+import tech.bingulhan.webserver.app.addon.iml.FileAddonCompiler;
 import tech.bingulhan.webserver.app.ui.ApplicationUI;
 import tech.bingulhan.webserver.server.HttpNettyServer;
 
@@ -32,6 +35,10 @@ public class AureliusApplication {
 
     private HttpNettyServer server;
 
+    @Getter
+    private List<Addon> addons;
+    private AddonCompiler addonCompiler;
+
     public static synchronized AureliusApplication getInstance() {
         return instance;
     }
@@ -50,6 +57,9 @@ public class AureliusApplication {
             return;
         }
 
+        addons = new ArrayList<>();
+        addonCompiler = new FileAddonCompiler();
+
         applicationUI = new ApplicationUI();
 
 
@@ -57,9 +67,13 @@ public class AureliusApplication {
 
         data = new AureliusApplicationData(this);
 
+
         if (data.isLoad()) {
+            addonCompiler.doCompileAllAddons();
             init(args);
          }
+
+
 
     }
 
