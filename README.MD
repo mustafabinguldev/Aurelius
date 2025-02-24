@@ -9,6 +9,7 @@
 - **6.** Configurable Server Settings: Allows configuration of server settings such as port and thread size via a settings.yml file.
 - **7.** Built-in UI: Provides a user interface with an option for easy server management (start, stop, reload).
 - **8.** Cross-platform: Works across all platforms with executable and JAR versions
+- **9.** Speed and Simplicity: It provides convenience to the developer with speed and simplicity.
 
 ### Learn before you start
 Check out the releases for a sample application.
