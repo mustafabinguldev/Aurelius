@@ -10,7 +10,7 @@
 - **7.** Built-in UI: Provides a user interface with an option for easy server management (start, stop, reload).
 - **8.** Cross-platform: Works across all platforms with executable and JAR versions
 - **9.** Speed and Simplicity: It provides convenience to the developer with speed and simplicity.
-- **10** Addons:You can design the web server exactly as you want, either by installing other people's addons or by writing your own addon!
+- **10** Addons:You can design the web server exactly as you want, either by installing other people's addons or by writing your own addon! Example Addon: [Go to project](https://github.com/mustafabinguldev/AureliusExampleAddon)
 ### Learn before you start
 Check out the releases for a sample application.
 main.html main directory is "/". All folder names under the app folder represent a root.
