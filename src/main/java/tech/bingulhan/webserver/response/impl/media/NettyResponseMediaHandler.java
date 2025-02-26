@@ -52,8 +52,12 @@ public class NettyResponseMediaHandler implements NettyResponseHandler {
                             Unpooled.wrappedBuffer(fileBytes)
                     );
 
-                    String contentType = getContentType(fileExtension);
-                    response.headers().set(HttpHeaderNames.CONTENT_TYPE, contentType);
+                    Optional<ResponseMediaType> responseMediaType = getContentType(fileExtension);
+                    if (!responseMediaType.isPresent()) {
+                        sendInternalServerError(ctx);
+                    }
+
+                    response.headers().set(HttpHeaderNames.CONTENT_TYPE, responseMediaType.get().getContentType());
                     response.headers().set(HttpHeaderNames.CONTENT_LENGTH, fileBytes.length);
                     response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.CLOSE);
 
@@ -71,20 +75,11 @@ public class NettyResponseMediaHandler implements NettyResponseHandler {
     }
 
 
-    private String getContentType(String fileExtension) {
-        switch (fileExtension) {
-            case "jpg":
-            case "jpeg":
-                return "image/jpeg";
-            case "png":
-                return "image/png";
-            case "mp4":
-                return "video/mp4";
-            case "gif":
-                return "image/gif";
-            default:
-                return "application/octet-stream";
+    private Optional<ResponseMediaType> getContentType(String fileExtension) {
+        if (Arrays.stream(ResponseMediaType.values()).noneMatch(responseMediaType -> responseMediaType.getExtension().equals(fileExtension))) {
+            return Optional.empty();
         }
+        return Arrays.stream(ResponseMediaType.values()).filter(responseMediaType -> responseMediaType.getExtension().equals(fileExtension)).findAny();
     }
 
     private void sendNotFound(ChannelHandlerContext ctx) {

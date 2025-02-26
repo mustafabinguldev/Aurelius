@@ -66,6 +66,7 @@ public class AureliusApplication {
 
         applicationFolder = file;
 
+        addons = new ArrayList<>();
         data = new AureliusApplicationData(this);
 
 
