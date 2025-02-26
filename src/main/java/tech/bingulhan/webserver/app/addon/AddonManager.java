@@ -4,7 +4,6 @@ import tech.bingulhan.webserver.app.AureliusApplication;
 import tech.bingulhan.webserver.app.PageStructure;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class AddonManager {
 
@@ -17,6 +16,19 @@ public class AddonManager {
 
         structureList.put(structure.getPageRoot(), structure);
         return true;
+    }
+    public static boolean addPlaceHolderData(String key, Object data) {
+
+        if (AureliusApplication.getInstance().getData().getPlaceholders().containsKey(key)) {
+            return false;
+        }
+
+        AureliusApplication.getInstance().getData().getPlaceholders().put("%"+key+"%", data.toString());
+        return true;
+    }
+
+    public static void reload() {
+        AureliusApplication.getInstance().getData().loadData();
     }
 
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.jsoup.Jsoup;
+import tech.bingulhan.webserver.app.addon.Addon;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,6 +55,7 @@ public class AureliusApplicationData {
         loadMediaFiles();
         loadPages();
 
+
         try {
             readPageData("/","main",new File(pathData.getFoldersFile(),
                             "main.html"), new File(pathData.getFoldersFile(), "main.css"),
@@ -61,6 +63,10 @@ public class AureliusApplicationData {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        AureliusApplication.getInstance().getAddons().stream().forEach(Addon::onDisable);
+        AureliusApplication.getInstance().getAddons().clear();
+        AureliusApplication.getInstance().getAddonCompiler().doCompileAllAddons();
 
     }
 

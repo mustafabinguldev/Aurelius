@@ -37,6 +37,8 @@ public class AureliusApplication {
 
     @Getter
     private List<Addon> addons;
+
+    @Getter
     private AddonCompiler addonCompiler;
 
     public static synchronized AureliusApplication getInstance() {
@@ -57,7 +59,6 @@ public class AureliusApplication {
             return;
         }
 
-        addons = new ArrayList<>();
         addonCompiler = new FileAddonCompiler();
 
         applicationUI = new ApplicationUI();
@@ -69,7 +70,6 @@ public class AureliusApplication {
 
 
         if (data.isLoad()) {
-            addonCompiler.doCompileAllAddons();
             init(args);
          }
 
