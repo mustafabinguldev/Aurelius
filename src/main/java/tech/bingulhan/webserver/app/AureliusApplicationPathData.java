@@ -40,7 +40,8 @@ public class AureliusApplicationPathData {
         containersFolder = new File(data.getApplication().getApplicationFolder(), "containers");
 
         if (!settingsFile.exists()) {
-            System.err.println("settings.yml not found. Loading now..");
+
+            System.out.println("settings.yml not found. Loading now..");
             try {
                 settingsFile.createNewFile();
 
@@ -67,7 +68,7 @@ public class AureliusApplicationPathData {
         }
 
         if (!placeholdersFile.exists()) {
-            System.err.println("placeholders.yml not found. Loading now..");
+            System.out.println("placeholders.yml not found. Loading now..");
             try {
                 placeholdersFile.createNewFile();
             } catch (IOException e) {
@@ -78,14 +79,14 @@ public class AureliusApplicationPathData {
         foldersFile = new File(data.getApplication().getApplicationFolder(), "app");
 
         if (!foldersFile.exists()) {
-            System.err.println("App folder not found. Loading now..");
+            System.out.println("App folder not found. Loading now..");
             foldersFile.mkdir();
 
         }
 
         File mainHtml = new File(foldersFile, "main.html");
         if (!mainHtml.exists()) {
-            System.err.println("Home page not found. Loading now..");
+            System.out.println("Home page not found. Loading now..");
             try {
                 mainHtml.createNewFile();
             } catch (IOException e) {

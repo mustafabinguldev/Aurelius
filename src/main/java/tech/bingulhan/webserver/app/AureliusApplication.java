@@ -1,5 +1,6 @@
 package tech.bingulhan.webserver.app;
 
+import jdk.internal.net.http.common.Log;
 import lombok.Getter;
 import org.yaml.snakeyaml.Yaml;
 import tech.bingulhan.webserver.app.addon.Addon;
@@ -12,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class AureliusApplication {
 
@@ -41,10 +43,10 @@ public class AureliusApplication {
     @Getter
     private AddonCompiler addonCompiler;
 
+
     public static synchronized AureliusApplication getInstance() {
         return instance;
     }
-
 
     public void stop() {
         server.shutdown();
@@ -98,7 +100,7 @@ public class AureliusApplication {
             }
 
 
-            System.out.println("Placeholders: " + data.getPlaceholders().size());
+            System.out.println("Number of placeholders registered: "+data.getPlaceholders().size());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -116,9 +118,7 @@ public class AureliusApplication {
             ui = (Boolean) serverSettings.get("ui");
 
 
-            System.out.println("Server Port: " + port);
-            System.out.println("Thread Size: " + threadSize);
-            System.out.println("UI: " + ui);
+            System.out.println("Server port: "+port);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.jsoup.Jsoup;
 import tech.bingulhan.webserver.app.addon.Addon;
 
+import javax.swing.plaf.metal.MetalIconFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -79,7 +80,7 @@ public class AureliusApplicationData {
     private void loadContainers() {
 
         if (!pathData.getContainersFolder().exists()) {
-            System.err.println("Containers folder not found.");
+            System.out.println("Containers folder not found.");
             pathData.getContainersFolder().mkdir();
         }else {
             if (Objects.requireNonNull(pathData.getContainersFolder().listFiles()).length>0) {
@@ -102,7 +103,8 @@ public class AureliusApplicationData {
                 });
             }
         }
-        System.out.println("Containers: "+containerStructures.size());
+
+        System.out.println("Number of registered containers: "+containerStructures.size());
     }
 
     private void loadMediaFiles() {
@@ -120,27 +122,40 @@ public class AureliusApplicationData {
             }
         }
 
-        System.out.println("Public Files: "+mediaStructures.size());
+        System.out.println("Number of media recorded: "+mediaStructures.size());
 
     }
 
     private void loadPages() {
         for (File folder : Objects.requireNonNull(pathData.getFoldersFile().listFiles())) {
             if (folder.isDirectory()) {
-                String pageName= folder.getName();
-                File htmlFolder = new File(folder, "page.html");
-                File jsFolder = new File(folder, "page.js");
-                File cssFolder = new File(folder, "page.css");
-                if (htmlFolder.exists() && htmlFolder.isFile()) {
-                    try {
-                        readPageData("/"+pageName, pageName, htmlFolder, cssFolder,jsFolder);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
+                loadFolder("/", folder);
             }
         }
+
+        System.out.println("Number of pages saved: "+getPages().size());
+
+    }
+
+    private void loadFolder(String localPath, File folder) {
+            String pageName= folder.getName();
+
+            File htmlFolder = new File(folder, "page.html");
+            File jsFolder = new File(folder, "page.js");
+            File cssFolder = new File(folder, "page.css");
+
+            if (htmlFolder.exists() && htmlFolder.isFile()) {
+                try {
+                    readPageData(localPath+pageName, pageName, htmlFolder, cssFolder, jsFolder);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+           for (File f : Objects.requireNonNull(folder.listFiles())) {
+               if (f.isDirectory()) loadFolder(localPath+pageName+"/", f);
+           }
+
     }
 
 
@@ -162,6 +177,5 @@ public class AureliusApplicationData {
             js = Jsoup.parse(jsFileText, "UTF-8").text();
         }
         pages.put(rootName, new PageStructure(pageName, html, js, css));
-        System.out.println("The page has been saved: "+rootName+" root: "+pageName);
     }
 }

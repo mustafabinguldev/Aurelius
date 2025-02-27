@@ -109,7 +109,7 @@ public class ApplicationUI extends Application {
     }
 
     public void load(String[] args) {
-        System.out.println("UI loading..");
+        System.out.println("UI Loading...");
         launch(args);
     }
 }
