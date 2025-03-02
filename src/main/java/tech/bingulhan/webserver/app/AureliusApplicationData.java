@@ -162,6 +162,10 @@ public class AureliusApplicationData {
 
 
     private void readPageData(String rootName,String pageName,File htmlFile, File cssFile, File jsFile) throws IOException {
+        if (rootName.contains("api")) {
+            return;
+        }
+
         String htmlFileText = new String(Files.readAllBytes(htmlFile.toPath()), StandardCharsets.UTF_8);
         String html = Jsoup.parse(htmlFileText, "UTF-8").html();
 

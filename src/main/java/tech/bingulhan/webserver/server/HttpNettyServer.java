@@ -1,21 +1,13 @@
 package tech.bingulhan.webserver.server;
 
-import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.*;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
-import io.netty.util.CharsetUtil;
 import tech.bingulhan.webserver.app.AureliusApplication;
 import tech.bingulhan.webserver.server.handler.HttpRequestHandler;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -54,8 +46,9 @@ public class HttpNettyServer {
                         protected void initChannel(Channel ch) throws Exception {
 
                             ch.pipeline().addLast(
-                                    new HttpRequestDecoder(),
                                     new HttpResponseEncoder(),
+                                    new HttpRequestDecoder(),
+                                    new HttpObjectAggregator(1048576),
                                     new HttpRequestHandler());
                         }
                     })

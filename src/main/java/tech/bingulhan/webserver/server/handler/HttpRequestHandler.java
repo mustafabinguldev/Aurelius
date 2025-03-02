@@ -9,11 +9,11 @@ import tech.bingulhan.webserver.response.NettyResponseHandler;
 import tech.bingulhan.webserver.response.NettyResponseService;
 import tech.bingulhan.webserver.response.RequestStructure;
 
-public class HttpRequestHandler extends SimpleChannelInboundHandler<DefaultHttpRequest> {
+public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, DefaultHttpRequest msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest msg) throws Exception {
 
-        if (msg.method() == HttpMethod.GET) {
+
 
             RequestStructure requestStructure = new RequestStructure();
             requestStructure.setValid(msg.uri() != null && !msg.uri().isEmpty());
@@ -26,8 +26,9 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<DefaultHttpR
 
             NettyResponseService service = new NettyResponseService(AureliusApplication.getInstance(), msg, ctx);
             NettyResponseHandler.handle(service, requestStructure);
-        }
+
     }
+
 
     private String getRootFromUri(String uri) {
         if (uri == null || uri.isEmpty()) {

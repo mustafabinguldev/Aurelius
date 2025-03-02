@@ -41,6 +41,9 @@ public class AureliusApplication {
     private List<Addon> addons;
 
     @Getter
+    private List<RestFulResponseStructure> restFulResponseStructures;
+
+    @Getter
     private AddonCompiler addonCompiler;
 
 
@@ -61,9 +64,10 @@ public class AureliusApplication {
             return;
         }
 
+        restFulResponseStructures = new ArrayList<>();
         addonCompiler = new FileAddonCompiler();
-
         applicationUI = new ApplicationUI();
+
 
 
         applicationFolder = file;
