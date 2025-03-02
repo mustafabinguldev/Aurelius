@@ -10,7 +10,7 @@
 - **7.** Built-in UI: Provides a user interface with an option for easy server management (start, stop, reload).
 - **8.** Cross-platform: Works across all platforms with executable and JAR versions
 - **9.** Speed and Simplicity: It provides convenience to the developer with speed and simplicity.
-- **10** Addons:You can design the web server exactly as you want, either by installing other people's addons or by writing your own addon! Example Addon: [Go to project](https://github.com/mustafabinguldev/AureliusExampleAddon)
+
 ### Learn before you start
 Check out the releases for a sample application.
 main.html main directory is "/". All folder names under the app folder represent a root.
@@ -112,4 +112,68 @@ server:
    threadSize: 2
    ui: true
  ```
+
+### Addons & RESTful:
+You can design the web server exactly as you want, either by installing other people's addons or by writing your own addon! Example Addon:
+[Go to project](https://github.com/mustafabinguldev/AureliusExampleAddon)
+#### Example:
+```
+     //domoin:8080/api/test POST
+      AddonManager.
+                registerRestFulService(new RestFulResponseStructure.Builder("test").
+                        setRestFulResponse(new UserDtoController()).
+                setRequestType(RestFulRequestType.POST).build());   
+      //domoin:8080/api/hello GET
+        AddonManager.
+                registerRestFulService(new RestFulResponseStructure.Builder("hello").
+                        setRestFulResponse(new RestFulResponseStructure.RestFulResponse<String, Object>() {
+                            @Override
+                            public String response(Object o) {
+                                return "Hello world!";
+                            }
+                            @Override
+                            public Object convert(String s) throws Exception {
+                                return null;
+                            }
+                        }).
+                        setRequestType(RestFulRequestType.GET).build());
+```
+```
+import tech.bingulhan.dto.UserDto;
+import tech.bingulhan.dto.request.UserRequest;
+import tech.bingulhan.webserver.app.RestFulResponseStructure;
+import tech.bingulhan.webserver.app.addon.AddonManager;
+public class UserDtoController implements RestFulResponseStructure.RestFulResponse<UserDto, UserRequest> {
+    @Override
+    public UserDto response(UserRequest request) {
+        UserDto userDto = new UserDto();
+        userDto.setUsername(request.getUsername());
+        userDto.setEmail(request.getEmail());
+        return userDto;
+    }
+    @Override
+    public UserRequest convert(String s) throws Exception {
+        return (UserRequest) AddonManager.convertFromBodyJson(s, UserRequest.class);
+    }
+}
+```
+
+```
+@Getter
+@Setter
+@ToString
+public class UserRequest {
+    private String username;
+    private String email;
+}
+@Getter
+@Setter
+@ToString
+public class UserDto {
+    private String username;
+    private String email;
+}
+
+
+```
 
