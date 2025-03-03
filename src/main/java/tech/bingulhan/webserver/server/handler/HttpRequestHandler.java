@@ -11,7 +11,7 @@ import tech.bingulhan.webserver.response.RequestStructure;
 
 public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest msg) {
 
 
 
