@@ -5,8 +5,10 @@ import lombok.Setter;
 import lombok.ToString;
 import org.jsoup.Jsoup;
 import tech.bingulhan.webserver.app.addon.Addon;
+import tech.bingulhan.webserver.app.mvc.ContainerStructure;
+import tech.bingulhan.webserver.app.mvc.MediaStructure;
+import tech.bingulhan.webserver.app.mvc.PageStructure;
 
-import javax.swing.plaf.metal.MetalIconFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -37,13 +39,10 @@ public class AureliusApplicationData {
 
     public AureliusApplicationData(AureliusApplication application) {
         this.application = application;
-
         pathData = new AureliusApplicationPathData(this);
-
         if (pathData.isLoad()) {
             init();
         }
-
     }
 
     public void loadData() {
@@ -51,12 +50,9 @@ public class AureliusApplicationData {
         mediaStructures = new ArrayList<>();
         placeholders = new HashMap<>();
         containerStructures = new ArrayList<>();
-
         loadContainers();
         loadMediaFiles();
         loadPages();
-
-
         try {
             readPageData("/","main",new File(pathData.getFoldersFile(),
                             "main.html"), new File(pathData.getFoldersFile(), "main.css"),
@@ -64,11 +60,9 @@ public class AureliusApplicationData {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         AureliusApplication.getInstance().getAddons().stream().forEach(Addon::onDisable);
         AureliusApplication.getInstance().getAddons().clear();
         AureliusApplication.getInstance().getAddonCompiler().doCompileAllAddons();
-
     }
 
     private void init() {
@@ -103,14 +97,11 @@ public class AureliusApplicationData {
                 });
             }
         }
-
         System.out.println("Number of registered containers: "+containerStructures.size());
     }
 
     private void loadMediaFiles() {
         File publicFolder = new File(application.getApplicationFolder(), "public");
-
-
         if (publicFolder.exists() && publicFolder.isDirectory()) {
             for (File file : Objects.requireNonNull(publicFolder.listFiles())) {
                 if (file.isFile()) {
@@ -121,9 +112,7 @@ public class AureliusApplicationData {
                 }
             }
         }
-
         System.out.println("Number of media recorded: "+mediaStructures.size());
-
     }
 
     private void loadPages() {
@@ -132,18 +121,14 @@ public class AureliusApplicationData {
                 loadFolder("/", folder);
             }
         }
-
         System.out.println("Number of pages saved: "+getPages().size());
-
     }
 
     private void loadFolder(String localPath, File folder) {
             String pageName= folder.getName();
-
             File htmlFolder = new File(folder, "page.html");
             File jsFolder = new File(folder, "page.js");
             File cssFolder = new File(folder, "page.css");
-
             if (htmlFolder.exists() && htmlFolder.isFile()) {
                 try {
                     readPageData(localPath+pageName, pageName, htmlFolder, cssFolder, jsFolder);
@@ -151,15 +136,10 @@ public class AureliusApplicationData {
                     e.printStackTrace();
                 }
             }
-
            for (File f : Objects.requireNonNull(folder.listFiles())) {
                if (f.isDirectory()) loadFolder(localPath+pageName+"/", f);
            }
-
     }
-
-
-
 
     private void readPageData(String rootName,String pageName,File htmlFile, File cssFile, File jsFile) throws IOException {
         if (rootName.contains("api")) {

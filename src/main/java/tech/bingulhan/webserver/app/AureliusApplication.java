@@ -1,11 +1,11 @@
 package tech.bingulhan.webserver.app;
 
-import jdk.internal.net.http.common.Log;
 import lombok.Getter;
 import org.yaml.snakeyaml.Yaml;
 import tech.bingulhan.webserver.app.addon.Addon;
 import tech.bingulhan.webserver.app.addon.AddonCompiler;
 import tech.bingulhan.webserver.app.addon.iml.FileAddonCompiler;
+import tech.bingulhan.webserver.app.restful.RestFulResponseStructure;
 import tech.bingulhan.webserver.app.ui.ApplicationUI;
 import tech.bingulhan.webserver.server.HttpNettyServer;
 
@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Logger;
 
 public class AureliusApplication {
 
@@ -57,31 +56,21 @@ public class AureliusApplication {
 
 
     public AureliusApplication(File file, String[] args) {
-
         instance = this;
         if (!file.exists()){
             System.err.println("The home directory could not be read.");
             return;
         }
-
         restFulResponseStructures = new ArrayList<>();
         addonCompiler = new FileAddonCompiler();
         applicationUI = new ApplicationUI();
-
-
-
         applicationFolder = file;
-
         addons = new ArrayList<>();
         data = new AureliusApplicationData(this);
-
 
         if (data.isLoad()) {
             init(args);
          }
-
-
-
     }
 
     public void init(String[] args) {
@@ -102,8 +91,6 @@ public class AureliusApplication {
                     data.getPlaceholders().put("%"+placeholder+"%", placeholders.get(placeholder).toString());
                 });
             }
-
-
             System.out.println("Number of placeholders registered: "+data.getPlaceholders().size());
 
         } catch (IOException e) {
@@ -120,10 +107,7 @@ public class AureliusApplication {
             port = (int) serverSettings.get("port");
             threadSize = (int) serverSettings.get("threadSize");
             ui = (Boolean) serverSettings.get("ui");
-
-
             System.out.println("Server port: "+port);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -140,8 +124,4 @@ public class AureliusApplication {
         server= new HttpNettyServer(this, args);
         server.start();
     }
-
-
-
-
 }

@@ -1,4 +1,4 @@
-package tech.bingulhan.webserver.app;
+package tech.bingulhan.webserver.app.mvc;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +9,9 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
-public class MediaStructure {
+public class ContainerStructure {
 
     private String name;
-    private String path;
-
+    private String htmlData;
 
 }

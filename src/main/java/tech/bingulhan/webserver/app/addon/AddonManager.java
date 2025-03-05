@@ -3,8 +3,8 @@ package tech.bingulhan.webserver.app.addon;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import tech.bingulhan.webserver.app.AureliusApplication;
-import tech.bingulhan.webserver.app.PageStructure;
-import tech.bingulhan.webserver.app.RestFulResponseStructure;
+import tech.bingulhan.webserver.app.mvc.PageStructure;
+import tech.bingulhan.webserver.app.restful.RestFulResponseStructure;
 
 import java.util.HashMap;
 import java.util.List;

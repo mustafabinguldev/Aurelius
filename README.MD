@@ -141,7 +141,7 @@ You can design the web server exactly as you want, either by installing other pe
 ```
 import tech.bingulhan.dto.UserDto;
 import tech.bingulhan.dto.request.UserRequest;
-import tech.bingulhan.webserver.app.RestFulResponseStructure;
+import tech.bingulhan.webserver.app.restful.RestFulResponseStructure;
 import tech.bingulhan.webserver.app.addon.AddonManager;
 public class UserDtoController implements RestFulResponseStructure.RestFulResponse<UserDto, UserRequest> {
     @Override

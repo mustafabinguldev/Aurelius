@@ -1,4 +1,4 @@
-package tech.bingulhan.webserver.app;
+package tech.bingulhan.webserver.app.mvc;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

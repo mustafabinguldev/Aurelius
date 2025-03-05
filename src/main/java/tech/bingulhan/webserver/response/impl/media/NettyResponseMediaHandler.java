@@ -4,7 +4,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
-import tech.bingulhan.webserver.app.MediaStructure;
+import tech.bingulhan.webserver.app.mvc.MediaStructure;
 import tech.bingulhan.webserver.response.NettyResponseHandler;
 import tech.bingulhan.webserver.response.NettyResponseService;
 import tech.bingulhan.webserver.response.RequestStructure;

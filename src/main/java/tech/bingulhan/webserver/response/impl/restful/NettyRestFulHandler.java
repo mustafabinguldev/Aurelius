@@ -1,11 +1,10 @@
 package tech.bingulhan.webserver.response.impl.restful;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 import tech.bingulhan.webserver.app.AureliusApplication;
-import tech.bingulhan.webserver.app.RestFulResponseStructure;
+import tech.bingulhan.webserver.app.restful.RestFulResponseStructure;
 import tech.bingulhan.webserver.response.NettyResponseHandler;
 import tech.bingulhan.webserver.response.NettyResponseService;
 import tech.bingulhan.webserver.response.RequestStructure;
