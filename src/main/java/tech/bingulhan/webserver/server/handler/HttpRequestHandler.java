@@ -1,6 +1,5 @@
 package tech.bingulhan.webserver.server.handler;
 
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
@@ -12,8 +11,6 @@ import tech.bingulhan.webserver.response.RequestStructure;
 public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest msg) {
-
-
 
             RequestStructure requestStructure = new RequestStructure();
             requestStructure.setValid(msg.uri() != null && !msg.uri().isEmpty());

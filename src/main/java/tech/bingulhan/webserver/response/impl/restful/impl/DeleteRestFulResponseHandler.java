@@ -15,9 +15,6 @@ import java.util.HashMap;
 
 
 public class DeleteRestFulResponseHandler implements RestFulResponseHandler {
-
-
-
     @Override
     public void handle(NettyResponseService service, RequestStructure structure, RestFulResponseStructure responseStructure) {
 
@@ -63,10 +60,7 @@ public class DeleteRestFulResponseHandler implements RestFulResponseHandler {
             response.headers().set(HttpHeaderNames.CONTENT_LENGTH, response.content().readableBytes());
             service.getCtx().writeAndFlush(response);
         }
-
-
     }
-
 
     private String convertToJson(Object object) {
         try {

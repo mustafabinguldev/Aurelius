@@ -18,9 +18,10 @@ public class NettyRestFulHandler implements NettyResponseHandler {
 
         Optional<RestFulResponseStructure> optionalRestFulResponseStructure = AureliusApplication.getInstance().
                 getRestFulResponseStructures().
-                stream().filter(str->
-                    structure.getRoot().equals("/api/"+str.getRoot())
-                ).findAny();
+                stream().
+                filter(str->
+                    structure.getRoot().equals("/api/"+str.getRoot())).
+                findAny();
 
         if (optionalRestFulResponseStructure.isPresent()) {
 

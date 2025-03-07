@@ -16,7 +16,6 @@ import java.util.Random;
 public class RestFulResponseHelper {
 
 
-
     private ChannelHandlerContext channelHandlerContext;
     private RequestStructure requestStructure;
     private RestFulResponseStructure responseStructure;
