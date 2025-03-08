@@ -16,7 +16,8 @@ public class NettyRestFulHandler implements NettyResponseHandler {
     @Override
     public void handleResponse(NettyResponseService service, RequestStructure structure) {
 
-        Optional<RestFulResponseStructure> optionalRestFulResponseStructure = AureliusApplication.getInstance().
+        Optional<RestFulResponseStructure> optionalRestFulResponseStructure =
+                AureliusApplication.getInstance().
                 getRestFulResponseStructures().
                 stream().
                 filter(str->
