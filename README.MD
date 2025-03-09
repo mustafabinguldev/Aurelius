@@ -127,24 +127,20 @@ You can design the web server exactly as you want, either by installing other pe
 AddonManager.registerRestFulService(new RestFulResponseStructure.Builder("hello").
                         setRestFulResponse(new RestFulResponseStructure.RestFulResponse<String, Object>() {
                             @Override
-                            public String response(Object o) {
-                                return "Hello world !";
-                            }
-
-                            @Override
-                            public Object convert(String s) throws Exception {
-                                return null;
-                            }
-
-                            @Override
-                            public void initializeSettings(RestFulResponseHelper restFulResponseHelper) {
-
+                            public String response(Object o, RestFulResponseHelper restFulResponseHelper) {
+                            
                                 CookieStructure cookieStructure = new CookieStructure();
                                 cookieStructure.setCookieName("randomid");
                                 cookieStructure.setCookieValue(""+new Random().nextInt(10000));
                                 cookieStructure.setFeatures(Arrays.asList(new CFMaxAge(3600), new CFHttpOnly()));
                                 restFulResponseHelper.sendCookie(cookieStructure);
+                                
+                                return "Hello world ! Path data:"+ Arrays.toString(restFulResponseHelper.getPathData());
+                            }
 
+                            @Override
+                            public Object convert(String s) throws Exception {
+                                return null;
                             }
                         }).
                         setRequestType(RestFulRequestType.GET).
@@ -158,8 +154,14 @@ import tech.bingulhan.webserver.app.addon.AddonManager;
 public class UserDtoController implements RestFulResponseStructure.RestFulResponse<UserDto, UserRequest> {
 
     @Override
-    public UserDto response(UserRequest request) {
+    public UserDto response(UserRequest request, RestFulResponseHelper restFulResponseHelpe) {
 
+        CookieStructure cookieStructure = new CookieStructure();
+        cookieStructure.setCookieName("randomid2");
+        cookieStructure.setCookieValue(""+new Random().nextInt(10000));
+        cookieStructure.setFeatures(Arrays.asList(new CFMaxAge(3600), new CFHttpOnly()));
+        restFulResponseHelper.sendCookie(cookieStructure);
+        
         UserDto userDto = new UserDto();
         userDto.setUsername(request.getUsername());
         userDto.setEmail(request.getEmail());
@@ -171,16 +173,6 @@ public class UserDtoController implements RestFulResponseStructure.RestFulRespon
     public UserRequest convert(String s) throws Exception {
         return (UserRequest) AddonManager.convertFromBodyJson(s, UserRequest.class);
     }
-
-    @Override
-    public void initializeSettings(RestFulResponseHelper restFulResponseHelper) {
-        CookieStructure cookieStructure = new CookieStructure();
-        cookieStructure.setCookieName("randomid2");
-        cookieStructure.setCookieValue(""+new Random().nextInt(10000));
-        cookieStructure.setFeatures(Arrays.asList(new CFMaxAge(3600), new CFHttpOnly()));
-        restFulResponseHelper.sendCookie(cookieStructure);
-    }
-
 }
 ```
 
