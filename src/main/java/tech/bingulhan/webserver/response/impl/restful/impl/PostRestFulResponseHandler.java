@@ -1,6 +1,7 @@
 package tech.bingulhan.webserver.response.impl.restful.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
@@ -36,9 +37,14 @@ public class PostRestFulResponseHandler implements RestFulResponseHandler {
         try {
             o = responseStructure.getRestFulResponse().convert(bodyJson);
             FullHttpResponse response = new DefaultFullHttpResponse(
-                    HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
-                    Unpooled.copiedBuffer(convertToJson(responseStructure.getRestFulResponse().response(o)), CharsetUtil.UTF_8)
+                    HttpVersion.HTTP_1_1, HttpResponseStatus.OK
             );
+
+            ByteBuf buf = Unpooled.copiedBuffer(convertToJson(
+                    responseStructure.getRestFulResponse().response(o, new RestFulResponseHelper(service.getCtx(), structure, responseStructure,
+                            response, receivedCookies))), CharsetUtil.UTF_8);
+            response.content().clear().writeBytes(buf);
+
             responseStructure.getCookies().forEach(cookie-> {
                 StringBuilder builder = new StringBuilder();
                 builder.append(cookie.getCookieName() + "=" + cookie.getCookieValue() + ";");
@@ -46,9 +52,6 @@ public class PostRestFulResponseHandler implements RestFulResponseHandler {
                 response.headers().add(HttpHeaderNames.SET_COOKIE, builder.toString());
             });
 
-            responseStructure.getRestFulResponse().initializeSettings(
-                    new RestFulResponseHelper(service.getCtx(), structure, responseStructure,
-                            response, receivedCookies));
 
             response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json");
             response.headers().set(HttpHeaderNames.CONTENT_LENGTH, response.content().readableBytes());

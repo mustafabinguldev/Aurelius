@@ -9,7 +9,6 @@ import tech.bingulhan.webserver.app.restful.cookie.CookieStructure;
 import tech.bingulhan.webserver.response.RequestStructure;
 
 import java.util.HashMap;
-import java.util.Random;
 
 
 @ToString
@@ -44,6 +43,10 @@ public class RestFulResponseHelper {
         builder.append(cookie.getCookieName() + "=" + cookie.getCookieValue() + ";");
         cookie.getFeatures().forEach(cookieFeature -> builder.append(" " + cookieFeature.toValue() + ";"));
         fullHttpResponse.headers().add(HttpHeaderNames.SET_COOKIE, builder.toString());
+    }
+
+    public String[] getPathData() {
+        return requestStructure.getPathDatas();
     }
 
 }

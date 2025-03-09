@@ -61,10 +61,9 @@ public class RestFulResponseStructure {
     }
 
     public interface RestFulResponse<R,B> {
-       R response(B o);
+       R response(B o, RestFulResponseHelper helper);
        B convert(String bodyJson) throws Exception;
 
-       void initializeSettings(RestFulResponseHelper helper);
     }
 
 }

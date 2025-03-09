@@ -17,4 +17,6 @@ public class RequestStructure {
 
     private String root;
 
+    private String[] pathDatas = new String[0];
+
 }
