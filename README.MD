@@ -115,6 +115,7 @@ server:
 
 ### Addons & RESTful:
 You can design the web server exactly as you want, either by installing other people's addons or by writing your own addon! Example Addon:
+
 [Go to project](https://github.com/mustafabinguldev/AureliusExampleAddon)
 #### Example:
 ```
