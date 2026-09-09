@@ -17,7 +17,7 @@ To start contributing code, first fork the repository and clone it locally:
 
 ```sh
 # Fork the repository via GitHub, then clone your fork
-$ git clone https://github.com/YOUR_USERNAME/Aurelius.git
+$ git clone https://github.com/mustafabinguldev/Aurelius.git
 $ cd Aurelius
 ```
 
