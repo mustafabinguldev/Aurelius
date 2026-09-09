@@ -2,6 +2,7 @@
 
 A lightweight Netty web server for HTML pages, reusable HTML components, static media, and Java addon REST endpoints. An optional JavaFX desktop panel shows server status and provides reload and stop controls.
 
+For detailed setup, application, addon, and architecture guidance, see the [Aurelius Wiki](docs/wiki/README.md).
 
 ![Dashboard](src/main/resources/dashboard.png)
 ## Build and run
