@@ -11,21 +11,35 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.release>26</maven.compiler.release>
+        <lombok.version>1.18.48</lombok.version>
+        <netty.version>4.1.137.Final</netty.version>
+        <javafx.version>26.0.1</javafx.version>
     </properties>
     <dependencies>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.23.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
+            <version>26.0.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -49,18 +63,23 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>17</version>
+            <version>${javafx.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>17</version>
+            <version>${javafx.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>4.1.72.Final</version> <!-- Versiyon numarasını ihtiyacınıza göre güncelleyebilirsiniz -->
+            <artifactId>netty-codec-http</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-handler</artifactId>
+            <version>${netty.version}</version>
         </dependency>
 
 
@@ -73,6 +92,25 @@
     <build>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.1</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.4</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -89,7 +127,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.6.2</version>
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>

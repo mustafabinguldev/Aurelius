@@ -21,7 +21,12 @@ public class AureliusApplication {
 
     @Getter
     private int port;
+    @Getter
     private int threadSize;
+    @Getter
+    private int requestThreadSize;
+    @Getter
+    private int maxPendingRequests;
 
     @Getter
     private boolean ui = false;
@@ -51,7 +56,7 @@ public class AureliusApplication {
     }
 
     public void stop() {
-        server.shutdown();
+        if (server != null) server.shutdown();
     }
 
 
@@ -103,21 +108,44 @@ public class AureliusApplication {
         try {
             Map<String, Object> settings = readYaml(getData().getPathData().getSettingsFile().getAbsolutePath());
 
-            Map<String, Object> serverSettings = (Map<String, Object>) settings.get("server");
-            port = (int) serverSettings.get("port");
-            threadSize = (int) serverSettings.get("threadSize");
-            ui = (Boolean) serverSettings.get("ui");
+            Object section = settings == null ? null : settings.get("server");
+            if (section != null && !(section instanceof Map)) {
+                throw new IllegalArgumentException("server bir YAML nesnesi olmalidir");
+            }
+            Map<?, ?> serverSettings = section == null ? Collections.emptyMap() : (Map<?, ?>) section;
+            int processors = Runtime.getRuntime().availableProcessors();
+            port = integerSetting(serverSettings, "port", 8080, 0, 65535);
+            threadSize = integerSetting(serverSettings, "threadSize", 0, 0, 1024);
+            if (threadSize == 0) threadSize = Math.min(4, processors);
+            requestThreadSize = integerSetting(serverSettings, "requestThreadSize", 0, 0, 1024);
+            if (requestThreadSize == 0) requestThreadSize = Math.max(2, Math.min(8, processors));
+            maxPendingRequests = integerSetting(serverSettings, "maxPendingRequests", 32, 16, 65536);
+            Object uiSetting = serverSettings.get("ui");
+            if (uiSetting != null && !(uiSetting instanceof Boolean)) {
+                throw new IllegalArgumentException("server.ui true veya false olmalidir");
+            }
+            ui = Boolean.TRUE.equals(uiSetting);
             System.out.println("Server port: "+port);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("settings.yml okunamadi", e);
         }
     }
 
+    private static int integerSetting(Map<?, ?> settings, String key, int fallback, int min, int max) {
+        Object value = settings.get(key);
+        if (value == null) return fallback;
+        if (!(value instanceof Integer || value instanceof Long)
+                || ((Number) value).longValue() < min || ((Number) value).longValue() > max) {
+            throw new IllegalArgumentException("server." + key + " " + min + ".." + max + " araliginda tam sayi olmalidir");
+        }
+        return ((Number) value).intValue();
+    }
 
     public Map<String, Object> readYaml(String filePath) throws IOException {
         Yaml yaml = new Yaml();
-        FileInputStream inputStream = new FileInputStream(filePath);
-        return yaml.load(inputStream);
+        try (FileInputStream inputStream = new FileInputStream(filePath)) {
+            return yaml.load(inputStream);
+        }
     }
 
     public void start(String[] args) {

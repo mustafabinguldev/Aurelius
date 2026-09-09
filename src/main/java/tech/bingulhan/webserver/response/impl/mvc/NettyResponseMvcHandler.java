@@ -102,7 +102,7 @@ public class NettyResponseMvcHandler implements NettyResponseHandler {
                                 "<script>\n" + jssData + "\n</script>\n</head>");
 
                 FullHttpResponse response = new DefaultFullHttpResponse(
-                        HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
+                        HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND,
                         Unpooled.copiedBuffer(mergedData, CharsetUtil.UTF_8));
 
                 response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/html; charset=UTF-8");
@@ -111,7 +111,7 @@ public class NettyResponseMvcHandler implements NettyResponseHandler {
 
             }else{
                 FullHttpResponse response = new DefaultFullHttpResponse(
-                        HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
+                        HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND,
                         Unpooled.copiedBuffer("<html><body>404</body></html>", CharsetUtil.UTF_8));
 
                 response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/html; charset=UTF-8");

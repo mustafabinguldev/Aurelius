@@ -2,6 +2,7 @@ package tech.bingulhan.webserver.app.ui;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -26,7 +27,7 @@ public class ApplicationUI extends Application {
         Menu serverMenu = new Menu("Server");
 
         MenuItem stopServerItem = new MenuItem("Stop Server");
-        stopServerItem.setOnAction(e -> AureliusApplication.getInstance().stop());
+        stopServerItem.setOnAction(e -> stopServer());
 
         MenuItem reloadServerItem = new MenuItem("Reload Server");
         reloadServerItem.setOnAction(e -> {
@@ -75,7 +76,7 @@ public class ApplicationUI extends Application {
 
         Scene scene = new Scene(root, 600, 400);
 
-        stage.setOnCloseRequest(event -> AureliusApplication.getInstance().stop());
+        stage.setOnCloseRequest(event -> stopServer());
         stage.setTitle("Aurelius 0.5.1 - Server Status");
         stage.setScene(scene);
         stage.setResizable(false);
@@ -111,5 +112,10 @@ public class ApplicationUI extends Application {
     public void load(String[] args) {
         System.out.println("UI Loading...");
         launch(args);
+    }
+
+    private void stopServer() {
+        AureliusApplication.getInstance().stop();
+        Platform.exit();
     }
 }
