@@ -1,49 +1,43 @@
-# Proje incelemesi — 9 Eylül 2026
+﻿# Project Review — September 9, 2026
 
-İnceleme kapsamı: Maven derlemesi, HTTP yönlendirme, HTML ve medya yanıtları,
-uygulama başlangıcı, YAML okuma ve eklenti yükleme. Bu çalışma tam güvenlik
-denetimi veya yük testi değildir.
+Review scope: Maven build, HTTP routing, HTML and media responses, application startup, YAML parsing, and addon loading. This work is not a full security audit or load test.
 
-## Düzeltilen sorunlar
+## Fixed Issues
 
-| Sorun | Sonuç | Kanıt |
+| Issue | Outcome | Evidence |
 | --- | --- | --- |
-| Olmayan REST endpoint'i HTTP 200 dönüyordu | HTTP 404 dönüyor | `NettyRestFulHandlerTest#missingRouteReturns404` |
-| `/api/usersExtra`, `users` endpoint'iyle eşleşiyordu | Eşleşme yol segmenti sınırını denetliyor | `NettyRestFulHandlerTest#routePrefixMustEndAtSegmentBoundary` |
-| Aynı yoldaki GET kaydı POST kaydını gölgeleyebiliyordu | En özgül yolun kayıtları arasından HTTP metoduna göre seçim yapılıyor | `NettyRestFulHandlerTest#samePathCanHaveMultipleMethods` |
-| Desteklenmeyen metot HTTP 400 dönüyordu | HTTP 405 ve desteklenen metotları gösteren `Allow` başlığı dönüyor | `NettyRestFulHandlerTest#unsupportedMethodReturns405AndAllow` |
-| İç içe endpoint'lerde endpoint'in bir kısmı parametrelere ekleniyordu | Parametreler eşleşen endpoint'ten sonraki segmentlerden oluşuyor | `NettyRestFulHandlerTest#nestedRouteReceivesOnlyRemainingSegments` |
-| Varsayılan ve özel HTML 404 sayfaları HTTP 200 dönüyordu | İki hata yanıtı da HTTP 404 dönüyor | `NettyResponseMvcHandlerTest` |
-| `.gitignore` bütün test dizinlerini dışlıyordu | Testler sürüm kontrolüne dahil edilebilir; JUnit ve Mockito test bağımlılıkları eklendi | `.gitignore`, `pom.xml`, `src/test/java` |
+| Missing REST endpoints returned HTTP 200 | Returns HTTP 404 | `NettyRestFulHandlerTest#missingRouteReturns404` |
+| `/api/usersExtra` matched the `users` endpoint | Matching checks path-segment boundaries | `NettyRestFulHandlerTest#routePrefixMustEndAtSegmentBoundary` |
+| A GET registration could shadow a POST registration at the same path | Selects by HTTP method among registrations at the most specific path | `NettyRestFulHandlerTest#samePathCanHaveMultipleMethods` |
+| Unsupported methods returned HTTP 400 | Returns HTTP 405 with an `Allow` header listing supported methods | `NettyRestFulHandlerTest#unsupportedMethodReturns405AndAllow` |
+| Part of a nested endpoint was included in the parameters | Parameters contain only the segments after the matched endpoint | `NettyRestFulHandlerTest#nestedRouteReceivesOnlyRemainingSegments` |
+| Default and custom HTML 404 pages returned HTTP 200 | Both error responses return HTTP 404 | `NettyResponseMvcHandlerTest` |
+| `.gitignore` excluded all test directories | Tests can be included in version control; JUnit and Mockito test dependencies were added | `.gitignore`, `pom.xml`, `src/test/java` |
 
-REST yönlendirici artık global uygulama yerine `NettyResponseService` içindeki
-uygulamayı kullanıyor. En özgül yol metodu desteklemiyorsa üst endpoint'e
-geri dönmüyor; bu davranış ayrı regresyon testiyle korunuyor.
+The REST router now uses the application provided by `NettyResponseService` instead of the global application. If the most specific path does not support the method, it does not fall back to a parent endpoint; a separate regression test covers this behavior.
 
-## Kalan bulgular ve öncelikleri
+## Remaining Findings and Priorities
 
-Aşağıdakiler kaynak kod incelemesi bulgularıdır; bu değişiklikte düzeltilmedi.
+The following findings came from source code review and were not fixed in this change.
 
-| Öncelik | Bulgu ve etkisi | Kaynak / önerilen çalışma |
+| Priority | Finding and Impact | Source / Suggested Work |
 | --- | --- | --- |
-| Yüksek | REST yanıtlarında oluşturulan geçici `ByteBuf`, `writeBytes(buf)` sonrasında serbest bırakılmıyor. Tekrarlanan isteklerde referans sayımlı kaynak birikimi riski var. | `src/main/java/tech/bingulhan/webserver/response/impl/restful/impl/` altındaki dört handler; doğrudan yanıt tamponuna yazma ve kaynak yaşam döngüsü testleri. |
-| Yüksek | Medya dosyasının tamamı Netty istek iş parçacığında senkron okunuyor. Büyük dosyalar bellek kullanımını artırıp diğer istekleri geciktirebilir. | `NettyResponseMediaHandler#handleResponse`; akış tabanlı aktarım ve eşzamanlı büyük dosya testi. |
-| Orta | `threadSize` ayarı okunuyor fakat worker sayısı işlemci sayısından hesaplanıyor. | `AureliusApplication#readSettingsYml`, `HttpNettyServer#start`; ayar doğrulaması ve yaşam döngüsü testleri. |
-| Orta | YAML giriş akışı kapatılmıyor; eksik veya yanlış tipli ayarlar doğrudan cast ediliyor. | `AureliusApplication#readYaml`, `readSettingsYml`; try-with-resources ve bozuk yapılandırma testleri. |
-| Orta | Eklenti yükleme hataları sessizce yutuluyor; sınıf yükleyici ve YAML akışının kapanışı yönetilmiyor. | `FileAddonCompiler#doCompileAllAddons`, `registerAddon`; eklenti yaşam döngüsüne bağlı kapatma ve hata raporlama. |
-| Orta | `shutdown()` bütün JVM'i kapatıyor; kesinti işareti geri yüklenmiyor; başlangıç hatasında executor temizliği eksik. | `HttpNettyServer`; gömülü kullanım, başlatma hatası ve durdurma testleri. |
-| Orta | Lombok ve annotations sürümleri `RELEASE`; aynı kaynak ileride farklı bağımlılıklarla derlenebilir. | `pom.xml`; sürümleri sabitleme ve bağımlılık güvenlik taraması. Güncel CVE taraması yapılmadı. |
-| Orta | README Java 8+ diyor, POM JavaFX 17 kullanıyor; Java 8 uyumluluğu doğrulanmış değil. | `README.MD`, `pom.xml`; desteklenen JDK matrisiyle CI. Bu çalışmada JDK 17 kullanıldı. |
+| High | The temporary `ByteBuf` created for REST responses is not released after `writeBytes(buf)`. Repeated requests risk accumulating reference-counted resources. | The four handlers under `src/main/java/tech/bingulhan/webserver/response/impl/restful/impl/`; write directly to the response buffer and add resource lifecycle tests. |
+| High | Entire media files are read synchronously on the Netty request thread. Large files may increase memory usage and delay other requests. | `NettyResponseMediaHandler#handleResponse`; streaming transfers and concurrent large-file tests. |
+| Medium | The `threadSize` setting is read, but the worker count is calculated from the processor count. | `AureliusApplication#readSettingsYml`, `HttpNettyServer#start`; configuration validation and lifecycle tests. |
+| Medium | YAML input streams are not closed; missing or incorrectly typed settings are cast directly. | `AureliusApplication#readYaml`, `readSettingsYml`; try-with-resources and invalid configuration tests. |
+| Medium | Addon loading errors are silently swallowed; classloader and YAML stream closure are not managed. | `FileAddonCompiler#doCompileAllAddons`, `registerAddon`; cleanup tied to the addon lifecycle and error reporting. |
+| Medium | `shutdown()` terminates the entire JVM; the interrupt flag is not restored; executor cleanup is incomplete on startup failure. | `HttpNettyServer`; tests for embedded usage, startup failures, and shutdown. |
+| Medium | Lombok and annotations use `RELEASE` versions; the same source may build against different dependencies in the future. | `pom.xml`; pin versions and scan dependencies for vulnerabilities. No current CVE scan was performed. |
+| Medium | The README states Java 8+, but the POM uses JavaFX 17; Java 8 compatibility has not been verified. | `README.MD`, `pom.xml`; CI with a supported JDK matrix. JDK 17 was used for this work. |
 
-## Doğrulama
+## Verification
 
-- Başlangıç derlemesi JDK 17 ve Maven 3.8.5 ile geçti; başlangıçta test yoktu.
-- REST düzeltmesinden önce 7 testin 6'sı beklenen davranış farklarıyla başarısız oldu.
-- HTML düzeltmesinden önce 3 testin 2'si `expected 404 but was 200` ile başarısız oldu.
-- Düzeltmelerden sonra Maven `verify` geçti: 10 test, 0 hata, 0 başarısızlık; JAR paketlendi.
-- Testler Netty `EmbeddedChannel` üzerinden gerçek handler yanıtlarını denetliyor.
-  Uygulama başlangıcı/disk erişimi taklit ediliyor; canlı soket, JavaFX arayüzü,
-  eklenti entegrasyonu ve yük altında çalışma sınanmadı.
+- The baseline build passed with JDK 17 and Maven 3.8.5; there were initially no tests.
+- Before the REST fixes, 6 of 7 tests failed due to the expected behavioral differences.
+- Before the HTML fixes, 2 of 3 tests failed with `expected 404 but was 200`.
+- After the fixes, Maven `verify` passed: 10 tests, 0 errors, 0 failures; the JAR was packaged.
+- Tests inspect actual handler responses through Netty `EmbeddedChannel`. Application startup and disk access are mocked; live sockets, the JavaFX UI, addon integration, and behavior under load were not tested.
 
-Yerel çalıştırma: JDK 17 ile `mvn test`; paketleme için `mvn verify`.
-Maven bu ortamda PATH üzerinde değildi; mevcut `.m2/wrapper/dists` kurulumu kullanıldı.
+Local execution: `mvn test` with JDK 17; `mvn verify` for packaging.
+Maven was not on PATH in this environment; the existing `.m2/wrapper/dists` installation was used.
