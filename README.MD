@@ -2,6 +2,8 @@
 
 A lightweight Netty web server for HTML pages, reusable HTML components, static media, and Java addon REST endpoints. An optional JavaFX desktop panel shows server status and provides reload and stop controls.
 
+
+![Dashboard](src/main/resources/dashboard.png)
 ## Build and run
 
 The current development version is **1.0-SNAPSHOT**, targeting **JDK 26** with JavaFX 26.0.1 and Netty 4.1.137.Final. Java 8 is no longer supported by this source version.

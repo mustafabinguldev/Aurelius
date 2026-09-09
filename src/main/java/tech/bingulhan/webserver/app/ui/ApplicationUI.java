@@ -3,110 +3,172 @@ package tech.bingulhan.webserver.app.ui;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.geometry.Pos;
-import javafx.scene.text.Font;
 import javafx.util.Duration;
 import tech.bingulhan.webserver.app.AureliusApplication;
 
-import javax.swing.JOptionPane;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
 public class ApplicationUI extends Application {
 
-    private List<Label> labels;
+    private static final String STYLESHEET = "/tech/bingulhan/webserver/app/ui/application-ui.css";
+
+    private List<Label> metricValues;
 
     @Override
-    public void start(Stage stage) throws Exception {
-        MenuBar menuBar = new MenuBar();
-        Menu serverMenu = new Menu("Server");
+    public void start(Stage stage) {
+        Label brandMark = new Label("A");
+        brandMark.getStyleClass().add("brand-mark");
+        Label eyebrow = new Label("AURELIUS / SERVER CONSOLE");
+        eyebrow.getStyleClass().add("eyebrow");
+        Label title = new Label("Server overview");
+        title.getStyleClass().add("page-title");
+        Label subtitle = new Label("Runtime resources, presented with clarity.");
+        subtitle.getStyleClass().add("page-subtitle");
+        VBox brandCopy = new VBox(4, eyebrow, title, subtitle);
 
-        MenuItem stopServerItem = new MenuItem("Stop Server");
-        stopServerItem.setOnAction(e -> stopServer());
+        Label status = new Label("●  SERVER ONLINE");
+        status.getStyleClass().add("status-pill");
+        Button reloadButton = new Button("Reload data");
+        reloadButton.getStyleClass().add("primary-action");
+        reloadButton.setOnAction(event -> reloadData(stage));
+        Button stopButton = new Button("Stop server");
+        stopButton.getStyleClass().add("danger-action");
+        stopButton.setOnAction(event -> stopServer());
 
-        MenuItem reloadServerItem = new MenuItem("Reload Server");
-        reloadServerItem.setOnAction(e -> {
-            AureliusApplication.getInstance().getData().loadData();
-            updateLabels();
-            JOptionPane.showMessageDialog(null, "The server has been updated.", "Updated", JOptionPane.INFORMATION_MESSAGE);
-        });
+        Region headerSpacer = new Region();
+        HBox.setHgrow(headerSpacer, Priority.ALWAYS);
+        HBox header = new HBox(16, brandMark, brandCopy, headerSpacer, status, reloadButton, stopButton);
+        header.setAlignment(Pos.CENTER_LEFT);
+        header.getStyleClass().add("header-panel");
 
-        stopServerItem.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+        Label dashboardLabel = new Label("SYSTEM SNAPSHOT");
+        dashboardLabel.getStyleClass().add("section-label");
+        Label dashboardHint = new Label("The active server configuration at a glance");
+        dashboardHint.getStyleClass().add("section-hint");
+        HBox sectionHeading = new HBox(12, dashboardLabel, dashboardHint);
+        sectionHeading.setAlignment(Pos.CENTER_LEFT);
 
-        reloadServerItem.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+        metricValues = Arrays.asList(new Label(), new Label(), new Label(), new Label());
+        Label footer = new Label("Reload data when configuration files or served resources change.");
+        footer.getStyleClass().add("footer-note");
+        VBox dashboard = new VBox(18, sectionHeading, createMetricGrid(), footer);
+        dashboard.getStyleClass().add("dashboard-content");
 
-        serverMenu.getItems().addAll(stopServerItem, reloadServerItem);
-        menuBar.getMenus().add(serverMenu);
+        BorderPane root = new BorderPane(dashboard);
+        root.setTop(header);
+        root.getStyleClass().add("app-shell");
 
-        VBox infoBox = new VBox(20);
-        infoBox.setAlignment(Pos.CENTER);
-        infoBox.setStyle("-fx-background-color: #f8f8f8; -fx-padding: 30; -fx-border-radius: 15; -fx-background-radius: 15; -fx-border-color: #e0e0e0; -fx-border-width: 2px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 2, 2);");
-
-
-        labels = Arrays.asList(new Label(), new Label(), new Label(), new Label());
-        Font infoFont = new Font("Segoe UI", 18);
-        labels.forEach(label -> {
-            label.setFont(infoFont);
-            label.setStyle("-fx-text-fill: #333; -fx-padding: 15px; -fx-background-color: #ffffff; -fx-border-radius: 8px; -fx-border-color: #ddd; -fx-border-width: 1px;");
-            label.setMaxWidth(350);
-            label.setAlignment(Pos.CENTER);
-            label.setStyle("-fx-background-color: #ffffff; -fx-border-radius: 8; -fx-border-color: #ddd; -fx-border-width: 1px;");
-
-            applyFadeTransition(label);
-        });
-
-        updateLabels();
-        infoBox.getChildren().addAll(labels);
-
-
-        BorderPane root = new BorderPane();
-        root.setTop(menuBar);
-        root.setCenter(infoBox);
-        root.setStyle("-fx-background-color: #ffffff; -fx-padding: 20px;");
-
-
-        menuBar.setStyle("-fx-background-color: linear-gradient(to right, #4CAF50, #388E3C); -fx-text-fill: white;");
-        serverMenu.setStyle("-fx-background-color: #2e7d32;");
-
-
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(root, 980, 680);
+        scene.getStylesheets().add(stylesheet());
+        updateMetricValues();
+        applyEntranceTransition(dashboard);
 
         stage.setOnCloseRequest(event -> stopServer());
-        stage.setTitle("Aurelius 0.5.1 - Server Status");
+        stage.setTitle("Aurelius 1.1 - Server Status");
+        stage.setMinWidth(860);
+        stage.setMinHeight(620);
         stage.setScene(scene);
-        stage.setResizable(false);
-
         stage.show();
     }
 
 
-    private void applyHoverEffect(MenuItem menuItem, String hoverColor) {
-        menuItem.setStyle("-fx-background-color: " + hoverColor + "; -fx-text-fill: white;");
+    private GridPane createMetricGrid() {
+        GridPane metricGrid = new GridPane();
+        metricGrid.setHgap(18);
+        metricGrid.setVgap(18);
+        metricGrid.getStyleClass().add("metric-grid");
+
+        ColumnConstraints firstColumn = new ColumnConstraints();
+        firstColumn.setPercentWidth(50);
+        firstColumn.setHgrow(Priority.ALWAYS);
+        ColumnConstraints secondColumn = new ColumnConstraints();
+        secondColumn.setPercentWidth(50);
+        secondColumn.setHgrow(Priority.ALWAYS);
+        metricGrid.getColumnConstraints().addAll(firstColumn, secondColumn);
+
+        metricGrid.add(createMetricCard("01", "LOADED PAGES", "Published routes available to serve", metricValues.get(0)), 0, 0);
+        metricGrid.add(createMetricCard("02", "CONTAINERS", "Structured content definitions", metricValues.get(1)), 1, 0);
+        metricGrid.add(createMetricCard("03", "MEDIA FILES", "Assets ready for delivery", metricValues.get(2)), 0, 1);
+        metricGrid.add(createMetricCard("04", "SERVER PORT", "Active network endpoint", metricValues.get(3)), 1, 1);
+        return metricGrid;
     }
 
-    private void applyDefaultEffect(MenuItem menuItem, String defaultColor) {
-        menuItem.setStyle("-fx-background-color: " + defaultColor + "; -fx-text-fill: white;");
+    private VBox createMetricCard(String number, String title, String description, Label value) {
+        Label metricNumber = new Label(number);
+        metricNumber.getStyleClass().add("metric-number");
+        Label metricTitle = new Label(title);
+        metricTitle.getStyleClass().add("metric-title");
+        Label metricDescription = new Label(description);
+        metricDescription.getStyleClass().add("metric-description");
+        value.getStyleClass().add("metric-value");
+
+        Region cardSpacer = new Region();
+        VBox.setVgrow(cardSpacer, Priority.ALWAYS);
+        Region headerSpacer = new Region();
+        HBox.setHgrow(headerSpacer, Priority.ALWAYS);
+        HBox cardHeader = new HBox(metricTitle, headerSpacer, metricNumber);
+
+        VBox card = new VBox(12, cardHeader, cardSpacer, value, metricDescription);
+        card.setPadding(new Insets(24));
+        card.setMinHeight(190);
+        card.setMaxWidth(Double.MAX_VALUE);
+        card.getStyleClass().add("metric-card");
+        return card;
     }
 
 
-    private void applyFadeTransition(Label label) {
-        FadeTransition fadeTransition = new FadeTransition(Duration.millis(500), label);
-        fadeTransition.setFromValue(0);
-        fadeTransition.setToValue(1);
-        fadeTransition.setCycleCount(1);
-        fadeTransition.play();
+    private void reloadData(Stage stage) {
+        AureliusApplication.getInstance().getData().loadData();
+        updateMetricValues();
+        showReloadedAlert(stage);
     }
 
-    private void updateLabels() {
-        labels.get(0).setText("📄 Loaded pages: " + AureliusApplication.getInstance().getData().getPages().keySet().size());
-        labels.get(1).setText("📦 Container: " + AureliusApplication.getInstance().getData().getContainerStructures().size());
-        labels.get(2).setText("🖼️ Media files: " + AureliusApplication.getInstance().getData().getMediaStructures().size());
-        labels.get(3).setText("🌐 Port: " + AureliusApplication.getInstance().getPort());
+    private void updateMetricValues() {
+        metricValues.get(0).setText(String.valueOf(AureliusApplication.getInstance().getData().getPages().size()));
+        metricValues.get(1).setText(String.valueOf(AureliusApplication.getInstance().getData().getContainerStructures().size()));
+        metricValues.get(2).setText(String.valueOf(AureliusApplication.getInstance().getData().getMediaStructures().size()));
+        metricValues.get(3).setText(String.valueOf(AureliusApplication.getInstance().getPort()));
+    }
+
+    private void showReloadedAlert(Stage stage) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.initOwner(stage);
+        alert.setTitle("Aurelius");
+        alert.setHeaderText("Data reloaded");
+        alert.setContentText("The dashboard now reflects the active server configuration.");
+        alert.showAndWait();
+    }
+
+    private String stylesheet() {
+        URL stylesheet = getClass().getResource(STYLESHEET);
+        if (stylesheet == null) {
+            throw new IllegalStateException("Missing dashboard stylesheet: " + STYLESHEET);
+        }
+        return stylesheet.toExternalForm();
+    }
+
+    private void applyEntranceTransition(Node node) {
+        FadeTransition transition = new FadeTransition(Duration.millis(350), node);
+        transition.setFromValue(0);
+        transition.setToValue(1);
+        transition.play();
     }
 
     public void load(String[] args) {

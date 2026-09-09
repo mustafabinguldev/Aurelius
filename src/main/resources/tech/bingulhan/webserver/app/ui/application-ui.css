@@ -1,0 +1,137 @@
+.app-shell {
+    -fx-background-color: #f6f7ff;
+    -fx-font-family: "Segoe UI";
+}
+
+.header-panel {
+    -fx-alignment: center-left;
+    -fx-background-color: #26225f;
+    -fx-padding: 26 34;
+    -fx-spacing: 16;
+}
+
+.brand-mark {
+    -fx-alignment: center;
+    -fx-background-color: #818cf8;
+    -fx-background-radius: 12;
+    -fx-font-size: 22px;
+    -fx-font-weight: 800;
+    -fx-min-height: 44;
+    -fx-min-width: 44;
+    -fx-text-fill: #17133f;
+}
+
+.eyebrow {
+    -fx-font-size: 10px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #b7b9f8;
+}
+
+.page-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: 700;
+    -fx-text-fill: white;
+}
+
+.page-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #c9cbee;
+}
+
+.status-pill {
+    -fx-background-color: #e5f6ed;
+    -fx-background-radius: 999;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-padding: 8 12;
+    -fx-text-fill: #16714b;
+}
+
+.button {
+    -fx-background-radius: 9;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-padding: 10 14;
+}
+
+.primary-action {
+    -fx-background-color: #818cf8;
+    -fx-text-fill: #19154c;
+}
+
+.primary-action:hover {
+    -fx-background-color: #a5b4fc;
+}
+
+.danger-action {
+    -fx-background-color: transparent;
+    -fx-border-color: #5b5791;
+    -fx-border-radius: 9;
+    -fx-text-fill: #ececff;
+}
+
+.danger-action:hover {
+    -fx-background-color: #3b3675;
+}
+
+.dashboard-content {
+    -fx-padding: 36 46 28;
+}
+
+.section-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #312e81;
+}
+
+.section-hint {
+    -fx-font-size: 13px;
+    -fx-text-fill: #69688a;
+}
+
+.metric-grid {
+    -fx-padding: 4 0 0;
+}
+
+.metric-card {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-border-color: #e5e7f6;
+    -fx-border-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(38, 34, 95, 0.08), 18, 0.12, 0, 6);
+}
+
+.metric-card:hover {
+    -fx-border-color: #c7d2fe;
+    -fx-effect: dropshadow(gaussian, rgba(38, 34, 95, 0.14), 24, 0.16, 0, 8);
+}
+
+.metric-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #565476;
+}
+
+.metric-number {
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #818cf8;
+}
+
+.metric-value {
+    -fx-font-size: 42px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #201d4b;
+}
+
+.metric-description {
+    -fx-font-size: 13px;
+    -fx-text-fill: #7a7997;
+}
+
+.footer-note {
+    -fx-font-size: 12px;
+    -fx-padding: 6 0 0;
+    -fx-text-fill: #8584a2;
+}
