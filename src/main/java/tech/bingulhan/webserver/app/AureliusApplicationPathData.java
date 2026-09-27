@@ -23,6 +23,8 @@ public class AureliusApplicationPathData {
 
     private File foldersFile;
 
+    private File reactFolder;
+
     private File settingsFile;
     private File placeholdersFile;
 
@@ -37,6 +39,7 @@ public class AureliusApplicationPathData {
         settingsFile = new File(data.getApplication().getApplicationFolder(), "settings.yml");
         placeholdersFile = new File(data.getApplication().getApplicationFolder(), "placeholders.yml");
         containersFolder = new File(data.getApplication().getApplicationFolder(), "containers");
+        reactFolder = new File(data.getApplication().getApplicationFolder(), "react");
 
         if (!settingsFile.exists()) {
 

@@ -85,7 +85,7 @@ Only files immediately inside `public/` are discovered; nested subdirectories ar
 
 ## Routing boundary
 
-The request dispatcher reserves `/public/...` for media and `/api/...` for REST. Any other path, including `/`, goes to the page handler. Avoid using `api` in a page route: the page loader intentionally does not register page paths that contain `api`.
+The request dispatcher reserves `/public/...` for media and `/api/...` for REST. Any other path, including `/`, goes to the page handler. Avoid using `api` in a page route: the page loader intentionally does not register page paths that contain `api`. When a React build exists in `react/`, it replaces the page handler; see [React Applications](react.md).
 
 ## Source references
 
