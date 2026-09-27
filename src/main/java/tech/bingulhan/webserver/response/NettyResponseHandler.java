@@ -9,13 +9,17 @@ public interface NettyResponseHandler {
         String[] paths = structure.getRoot().split("/");
         if (paths.length>1) {
             for (NettyResponseType type: NettyResponseType.values()) {
-                if (type.path.equals(paths[1])) {
+                if (type.path != null && !type.path.isEmpty() && type.path.equals(paths[1])) {
                     type.handler.handleResponse(service, structure);
                     return;
                 }
             }
         }
 
+        if (service.getApplication().getData().isReactEnabled()) {
+            NettyResponseType.REACT.handler.handleResponse(service, structure);
+            return;
+        }
         NettyResponseType.PAGE.handler.handleResponse(service,structure);
 
 

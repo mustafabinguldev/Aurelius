@@ -16,7 +16,7 @@ mvn verify
 java -Dfile.encoding=UTF-8 -jar target/Aurelius-1.0-SNAPSHOT.jar
 ```
 
-`mvn verify` runs the tests and builds a JAR containing the dependencies. Use `mvn test` to run only the tests. The current suite has 24 tests; build and packaging were verified locally on Windows with JDK 26. Other operating systems and the JavaFX UI have not been verified in this update.
+`mvn verify` runs the tests and builds a JAR containing the dependencies. Use `mvn test` to run only the tests. The current suite has 32 tests; build and packaging were verified locally on Windows with JDK 26. Other operating systems and the JavaFX UI have not been verified in this update.
 
 Aurelius uses the **current working directory** as its application directory. On first launch it creates `settings.yml`, `placeholders.yml`, `app/main.html`, and `containers/`. The generated home page is empty; add your HTML, then restart. Visit `http://localhost:8080`.
 
@@ -100,6 +100,19 @@ Use both in `app/main.html`:
 </body>
 </html>
 ```
+
+## React applications
+
+Aurelius can serve a React single-page application. Copy your production build (Vite's `dist/` or Create React App's `build/`) into `react/` in the application directory and restart:
+
+```text
+application-directory/
+└── react/
+    ├── index.html
+    └── assets/
+```
+
+When `react/index.html` exists, the React build replaces the HTML page handler. Existing build files are served with suitable content types, hashed files in `assets/` or `static/` are cached long-term, and other paths such as `/users/42` fall back to `index.html` for client-side routing. `/api/...` and `/public/...` keep working, so the app can call addon endpoints with `fetch("/api/...")`. See [React Applications](docs/wiki/react.md) for details and a Vite dev-proxy example.
 
 ## Addons and REST
 

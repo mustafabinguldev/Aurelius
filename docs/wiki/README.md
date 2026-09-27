@@ -4,7 +4,7 @@ Welcome to the Aurelius project wiki. Aurelius is a lightweight Java web server 
 
 This wiki has two paths:
 
-- **Application users** can start with [Getting Started](getting-started.md), then learn how to build [Pages and Media](pages-and-media.md).
+- **Application users** can start with [Getting Started](getting-started.md), then learn how to build [Pages and Media](pages-and-media.md) or serve a [React application](react.md).
 - **Addon developers** should read [Addons and REST](addons-and-rest.md), then use [Architecture](architecture.md) to understand the request pipeline and extension boundaries.
 - **Contributors** can use [Development](development.md) for the project layout, build commands, tests, and known constraints.
 
@@ -17,6 +17,8 @@ Aurelius starts from the current working directory, which becomes the applicatio
 | `/` | HTML pages, including optional page CSS and JavaScript | Application users |
 | `/public/...` | Static media files | Application users |
 | `/api/...` | REST endpoints supplied by addons | Addon developers |
+
+When `react/index.html` exists, a React build takes over the `/` area; see [React Applications](react.md).
 
 At a high level, a request enters the Netty HTTP server, is processed by an ordered request worker for its connection, and is dispatched to the page, media, or REST handler. The [Architecture](architecture.md) guide explains this flow and its concurrency guarantees in detail.
 

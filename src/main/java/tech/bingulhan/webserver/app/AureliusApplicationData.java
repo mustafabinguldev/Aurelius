@@ -37,6 +37,8 @@ public class AureliusApplicationData {
 
     private boolean isLoad = false;
 
+    private boolean reactEnabled = false;
+
     public AureliusApplicationData(AureliusApplication application) {
         this.application = application;
         pathData = new AureliusApplicationPathData(this);
@@ -53,6 +55,7 @@ public class AureliusApplicationData {
         loadContainers();
         loadMediaFiles();
         loadPages();
+        loadReact();
         try {
             readPageData("/","main",new File(pathData.getFoldersFile(),
                             "main.html"), new File(pathData.getFoldersFile(), "main.css"),
@@ -113,6 +116,14 @@ public class AureliusApplicationData {
             }
         }
         System.out.println("Number of media recorded: "+mediaStructures.size());
+    }
+
+    private void loadReact() {
+        reactEnabled = new File(pathData.getReactFolder(), "index.html").isFile();
+        if (reactEnabled) {
+            System.out.println("React build found. Serving the single-page application from: "
+                    + pathData.getReactFolder().getAbsolutePath());
+        }
     }
 
     private void loadPages() {
